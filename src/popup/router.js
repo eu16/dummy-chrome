@@ -1,26 +1,22 @@
 import Vue from "vue";
 import Router from "vue-router";
 import AuthRoute from "./AuthRoute.vue";
-
 import CreateWallet from "./pages/Wallet/CreateWallet.vue";
 import ImportWallet from "./pages/Wallet/ImportWallet.vue";
 import ConnectHardwareWallet from "./pages/Wallet/ConnectHardwareWallet.vue";
-
 import LogIn from "./pages/API/LogIn.vue";
 import SignTransaction from "./pages/API/SignTransaction.vue";
 import PersonalSign from "./pages/API/PersonalSign.vue";
-
 import Hrc20Tokens from "./pages/Token/Hrc20Tokens.vue";
 import Hrc721Tokens from "./pages/Token/Hrc721Tokens.vue";
 import AddToken from "./pages/Token/AddToken.vue";
 import AddHRC721Token from "./pages/Token/AddHRC721Token.vue";
 import Gallery from "./pages/Token/HRC721/Gallery.vue";
-
 import SendOne from "./pages/Send/SendOne.vue";
 import SendToken from "./pages/Send/SendToken.vue";
-
 import Account from "./pages/Account.vue";
-import History from "./pages/History.vue";
+// import History from "./pages/History.vue";
+import Withdrawal from "./pages/Withdrawal.vue";
 import Deposit from "./pages/Deposit.vue";
 import Lock from "./pages/Lock.vue";
 import ExportPrivateKey from "./pages/ExportPrivateKey.vue";
@@ -153,6 +149,15 @@ const router = new Router({
       path: "/deposit",
       name: "deposit",
       component: Deposit,
+      meta: {
+        requiredAccount: true,
+        authenticate: true,
+      },
+    },
+    {
+      path: "/withdrawal",
+      name: "withdrawal",
+      component: Withdrawal,
       meta: {
         requiredAccount: true,
         authenticate: true,

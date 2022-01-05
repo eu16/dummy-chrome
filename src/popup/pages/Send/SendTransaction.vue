@@ -81,7 +81,7 @@
             </label>
             <label class="input-label gas-one">
               Gas Fee
-              <input class="input-field" type="text" name="gasfee" ref="gasfee" readonly :value="`${getGasFee} ONE`" />
+              <input class="input-field" type="text" name="gasfee" ref="gasfee" readonly :value="`${getGasFee} EUN`" />
             </label>
           </div>
           <button class="primary flex" type="submit">Send</button>

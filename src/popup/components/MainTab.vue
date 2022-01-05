@@ -13,7 +13,7 @@
       to="/deposit"
       >Deposit</router-link
     >
-    <router-link to="/history"
+    <router-link to="/withdrawal"
       >Withdraw</router-link
     >
     <!-- <router-link
