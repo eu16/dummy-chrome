@@ -2,8 +2,8 @@
   <header class="header">
     <div class="header-top">
       <router-link class="header-logo" to="/home">
-        <img src="images/harmony-small.png" alt="Harmony" />
-        <span>Harmony</span>
+        <img src="images/img_home_logo.png" alt="" style="max-width:100px"/>
+        <!-- <span>Harmony</span> -->
       </router-link>
       <div class="header-lock">
         <a

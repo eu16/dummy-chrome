@@ -3,11 +3,12 @@
     <app-header headerTab="create-tab" />
     <main class="main">
       <div class="main-logo">
-        <img
+        <!-- <img
           src="images/harmony.png"
           alt="Harmony"
           :class="{ 'logo-md': selectType === 'keystore' && scene === 2 }"
-        />
+        /> -->
+        <img src="images/Eurus.svg" alt="Harmony" style="max-width:130px; padding:20px"/>
       </div>
       <div v-if="scene === 1">
         <div class="type-row">

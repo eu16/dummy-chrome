@@ -6,6 +6,19 @@
     <router-link
       :class="{ active: myroute.name == 'hrc20tokens' }"
       to="/hrc20tokens"
+      >Send</router-link
+    >
+    <router-link
+      :class="{ active: myroute.name == 'hrc721tokens' }"
+      to="/hrc721tokens"
+      >Receive</router-link
+    >
+    <router-link to="/history"
+      >Withdraw</router-link
+    >
+    <!-- <router-link
+      :class="{ active: myroute.name == 'hrc20tokens' }"
+      to="/hrc20tokens"
       >HRC20</router-link
     >
     <router-link
@@ -15,7 +28,7 @@
     >
     <router-link :class="{ active: myroute.name == 'history' }" to="/history"
       >History</router-link
-    >
+    > -->
   </nav>
 </template>
 

@@ -14,7 +14,7 @@
   font-size: 12px;
   .primary {
     padding: 8px 0;
-    color: #f44336;
+    color: #059FDD;
     cursor: pointer;
     flex: 1;
     border: 1px solid #eee;
@@ -57,6 +57,6 @@
 }
 .vue-dialog-buttons {
   & > button:nth-child(2) {
-    color: #f44336;
+    color: #059FDD;
   }
 }

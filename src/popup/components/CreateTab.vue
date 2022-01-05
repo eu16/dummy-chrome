@@ -1,13 +1,13 @@
 <template>
   <nav class="header-tabs">
-    <router-link :class="{ active: myroute.name == 'create-wallet' }" to="/create-wallet">Create</router-link>
-    <router-link :class="{ active: myroute.name == 'import-wallet' }" to="/import-wallet">Login</router-link>
+    <router-link :class="{ active: myroute.name == 'create-wallet' }" to="/create-wallet">Register Account</router-link>
+    <router-link :class="{ active: myroute.name == 'import-wallet' }" to="/import-wallet">Centralized Login</router-link>
     <router-link
       :class="{
         active: myroute.name == 'connect-hardware-wallet',
       }"
       to="/connect-hardware-wallet"
-    >Connect with Metamask</router-link>
+    >Dentralized Login</router-link>
   </nav>
 </template>
 

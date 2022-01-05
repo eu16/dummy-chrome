@@ -3,7 +3,7 @@
     <app-header headerTab="create-tab" />
     <main class="main">
       <div class="main-logo" v-if="scene === 1 || scene === 4">
-        <img src="images/harmony.png" alt="Harmony" />
+        <img src="images/Eurus.svg" alt="Harmony" style="max-width:130px; padding:20px" />
       </div>
       <div v-if="scene === 1">
         <label class="input-label account-name">

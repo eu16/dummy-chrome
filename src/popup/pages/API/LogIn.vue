@@ -3,6 +3,7 @@
     <main class="prompt">
       <div class="header-row">
         <img src="images/harmony.png" alt="Harmony" />
+        <!-- <img src="images/Eurus.svg" alt="Harmony" style="max-width:130px; padding:20px" /> -->
         <span>Harmony</span>
       </div>
       <h3>Sign in Request</h3>

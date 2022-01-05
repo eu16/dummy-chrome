@@ -1,8 +1,8 @@
 const AppInfo = require("./app.json");
 
 module.exports = {
-  name: "Harmony Chrome Extension Wallet",
-  description: "Harmony Chrome Extension Wallet",
+  name: "Eurus Chrome Extension Wallet",
+  description: "Eurus Chrome Extension Wallet",
   author: "Harmony",
   version: AppInfo.version,
   icons: {
@@ -14,7 +14,7 @@ module.exports = {
 
   permissions: ["storage", "activeTab"],
   browser_action: {
-    default_title: "Harmony Chrome Extension Wallet",
+    default_title: "Eurus Chrome Extension Wallet",
     default_popup: "popup.html",
   },
   background: {

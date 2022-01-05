@@ -3,11 +3,12 @@
     <app-header headerTab="create-tab" />
     <main class="main connect-wallet">
       <div class="main-logo">
-        <img
+        <!-- <img
           src="images/harmony.png"
           :class="{ 'logo-md': scene === 2 ? true : false }"
           alt="Harmony"
-        />
+        /> -->
+        <img src="images/Eurus.svg" alt="Harmony" style="max-width:130px; padding:20px" />
       </div>
       <div v-if="scene === 1">
         <h3>Connect a hardware wallet</h3>

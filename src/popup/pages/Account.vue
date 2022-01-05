@@ -4,7 +4,7 @@
     <main class="main">
       <div class="relative">
         <div class="main-logo">
-          <img :src="displayMode ? 'images/ethereum.svg' : 'images/harmony-big.png'" class="logo-img" alt="Harmony" />
+          <img :src="displayMode ? 'images/ethereum.svg' : 'images/Eurus.svg'" class="logo-img" alt="Eurus" />
         </div>
         <span v-if="wallets.active.isLedger" class="ledger-badge big account-badge">Ledger</span>
       </div>
@@ -22,7 +22,7 @@
             @click="switchAddress"
             v-tooltip.top="displayMode ? 'Switch to ONE Address' : 'Switch to Ethereum Address'"
           >
-            <img :src="!displayMode ? 'images/ethereum.svg' : 'images/harmony.png'" height="20px" alt="Harmony" />
+            <img :src="!displayMode ? 'images/ethereum.svg' : 'images/Eurus.svg'" height="20px" alt="Harmony" />
           </div>
         </div>
 
@@ -30,23 +30,23 @@
 
         <div class="box-balance">
           {{ formatBalance(account.balance, 4) }}
-          <span class="box-balance-code">ONE</span>
+          <span class="box-balance-code">EUN</span>
         </div>
-        <div class="box-usd-balance">
+        <!-- <div class="box-usd-balance">
           <span v-if="!tokenPrice">---</span>
           <span v-else>≈ {{ formatBalance(getUSDBalance, 4) }}</span>
           <span class="box-usd-balance-code">USD</span>
-        </div>
+        </div> -->
 
         <!-- Shard -->
-        <div class="shard-box">
+        <!-- <div class="shard-box">
           <div>Shard</div>
           <select v-model="shard" v-tooltip.top="'Select the shards'">
             <option v-for="item in account.shardArray" :value="item.shardID" :key="item.shardID">
               {{ item.shardID }}
             </option>
           </select>
-        </div>
+        </div> -->
         <div class="button-group">
           <button class="outline" @click="$router.push('/deposit')" v-tooltip.top="'Deposit token'">
             Deposit

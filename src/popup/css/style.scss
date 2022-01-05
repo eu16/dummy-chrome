@@ -74,13 +74,13 @@ body {
 }
 
 a {
-  color: #f44336;
+  color: #059FDD;
   text-decoration: none;
   cursor: pointer;
   outline: 0;
 }
 a:hover {
-  color: #d32f2f;
+  color: #5d6fd3;
 }
 
 .header-tabs {
@@ -97,12 +97,12 @@ a:hover {
   text-align: center;
 }
 .header-tabs a.active {
-  color: #f44336;
-  border-bottom: 2px solid #f44336;
+  color: #059FDD;
+  border-bottom: 2px solid #059FDD;
 }
 .header-tabs a:hover,
 .header-tabs a:focus {
-  color: #d32f2f;
+  color: #5d6fd3;
 }
 .header-tabs a.disabled {
   pointer-events: none;

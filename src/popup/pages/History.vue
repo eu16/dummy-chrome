@@ -254,7 +254,7 @@ export default {
   font-size: 24px;
   padding: 8px;
   width: 40px;
-  color: #f44336;
+  color: #059FDD;
 }
 .transfer-content {
   flex: 1;
@@ -280,7 +280,7 @@ export default {
 }
 .transfer-icon,
 .transfer-amount {
-  color: #f44336;
+  color: #059FDD;
 }
 .transfer-icon.incoming,
 .transfer-amount.incoming {
