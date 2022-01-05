@@ -34,6 +34,20 @@ export default {
           "Change the security settings (PIN Code, PIN digits and Lock timer)",
         route: "/settings/security",
       },
+      {
+        icon: "language",
+        name: "Language",
+        description:
+          "Change the Language of the Eurus Wallet",
+        route: "/settings/language",
+      },
+      {
+        icon: "help",
+        name: "Language",
+        description:
+          "Need help? Our FAQ, Customer Service, Terms and Conditions goes here",
+        route: "/settings/helpcenter",
+      },
     ],
   }),
 };

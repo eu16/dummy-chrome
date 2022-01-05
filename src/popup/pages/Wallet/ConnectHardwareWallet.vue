@@ -11,7 +11,7 @@
         <img src="images/Eurus.svg" alt="Harmony" style="max-width:130px; padding:20px" />
       </div>
       <div v-if="scene === 1">
-        <h3>Connect a hardware wallet</h3>
+        <h3>Connect to Metamask</h3>
         <span class="form-label"
           >Please plug in your Ledger Nano S and open the Harmony App.</span
         >

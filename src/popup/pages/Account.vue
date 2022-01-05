@@ -1,36 +1,76 @@
 <template>
   <div>
-    <app-header @refresh="refreshAccount" @networkChanged="refreshAccount" headerTab="main-tab" />
+    <app-header
+      @refresh="refreshAccount"
+      @networkChanged="refreshAccount"
+      headerTab="main-tab"
+    />
     <main class="main">
       <div class="relative">
         <div class="main-logo">
-          <img :src="displayMode ? 'images/ethereum.svg' : 'images/Eurus.svg'" class="logo-img" alt="Eurus" />
+          <img
+            :src="displayMode ? 'images/ethereum.svg' : 'images/Eurus.svg'"
+            class="logo-img"
+            alt="Eurus"
+          />
         </div>
-        <span v-if="wallets.active.isLedger" class="ledger-badge big account-badge">Ledger</span>
+        <span
+          v-if="wallets.active.isLedger"
+          class="ledger-badge big account-badge"
+          >Ledger</span
+        >
       </div>
       <div class="container">
         <div class="account-container">
-          <div class="account-box" @click="onClickAccount()" v-tooltip.top="'Click to copy'">
+          <div
+            class="account-box"
+            @click="onClickAccount()"
+            v-tooltip.top="'Click to copy'"
+          >
             <h2 class="name-label">{{ compressName(wallets.active.name) }}</h2>
             <div class="name-ens" v-if="ensName">{{ ensName }}</div>
             <div class="box-address">
-              {{ compressAddress(displayMode ? switchToHexAddress(this.address) : this.address, 20, 5) }}
+              {{
+                compressAddress(
+                  displayMode ? switchToHexAddress(this.address) : this.address,
+                  20,
+                  5
+                )
+              }}
             </div>
           </div>
           <div
             class="switch-box"
             @click="switchAddress"
-            v-tooltip.top="displayMode ? 'Switch to ONE Address' : 'Switch to Ethereum Address'"
+            v-tooltip.top="
+              displayMode
+                ? 'Switch to ONE Address'
+                : 'Switch to Ethereum Address'
+            "
           >
-            <img :src="!displayMode ? 'images/ethereum.svg' : 'images/Eurus.svg'" height="20px" alt="Harmony" />
+            <img
+              :src="!displayMode ? 'images/ethereum.svg' : 'images/Eurus.svg'"
+              height="20px"
+              alt="Harmony"
+            />
           </div>
         </div>
 
         <div class="box-label">Account Balance</div>
 
         <div class="box-balance">
-          {{ formatBalance(account.balance, 4) }}
+          12.03928
           <span class="box-balance-code">EUN</span>
+        </div>
+        <div class="divider"></div>
+        <div class="box-balance">
+          0.0229783
+          <span class="box-balance-code">ETH</span>
+        </div>
+        <div class="divider"></div>
+        <div class="box-balance">
+          10.092318
+          <span class="box-balance-code">USDT</span>
         </div>
         <!-- <div class="box-usd-balance">
           <span v-if="!tokenPrice">---</span>
@@ -59,15 +99,26 @@
         <div class="footer price-bar" v-if="tokenPrice">
           <marquee-text :duration="20">
             <span class="token-symbol-indicator">Harmony:</span>
-            <span class="token-price-indicator">{{ tokenPrice["one"] }} USD</span>
+            <span class="token-price-indicator"
+              >{{ tokenPrice["one"] }} USD</span
+            >
             <span class="token-symbol-indicator">Bitcoin:</span>
-            <span class="token-price-indicator">{{ tokenPrice["btc"] }} USD</span>
+            <span class="token-price-indicator"
+              >{{ tokenPrice["btc"] }} USD</span
+            >
             <span class="token-symbol-indicator">Ethereum:</span>
-            <span class="token-price-indicator">{{ tokenPrice["eth"] }} USD</span>
+            <span class="token-price-indicator"
+              >{{ tokenPrice["eth"] }} USD</span
+            >
           </marquee-text>
         </div>
       </div>
-      <notifications group="copied" width="180" :max="2" class="notifiaction-container" />
+      <notifications
+        group="copied"
+        width="180"
+        :max="2"
+        class="notifiaction-container"
+      />
     </main>
   </div>
 </template>
@@ -94,6 +145,7 @@ export default {
     switchToHexAddress: oneToHexAddress,
     tokenPrice: null,
     ensName: null,
+    walletAddress: "0x8D3FF907778FCdba50024e87d1C693366365c1f6",
   }),
 
   computed: {
@@ -103,12 +155,17 @@ export default {
       displayMode: (state) => state.settings.displayMode,
     }),
     getUSDBalance() {
-      return new BigNumber(this.account.balance).multipliedBy(this.tokenPrice["one"]).toFixed();
+      return new BigNumber(this.account.balance)
+        .multipliedBy(this.tokenPrice["one"])
+        .toFixed();
     },
   },
 
   async mounted() {
-    if (typeof this.account.shard !== "undefined" || this.account.shard !== null) {
+    if (
+      typeof this.account.shard !== "undefined" ||
+      this.account.shard !== null
+    ) {
       this.shard = this.account.shard;
     } else {
       this.$store.commit("account/shard", 0);
@@ -157,7 +214,9 @@ export default {
       else this.$router.push("/send");
     },
     onClickAccount() {
-      this.$copyText(this.displayMode ? oneToHexAddress(this.address) : this.address).then(() => {
+      this.$copyText(
+        this.displayMode ? oneToHexAddress(this.address) : this.address
+      ).then(() => {
         this.$notify({
           group: "copied",
           type: "info",
@@ -166,7 +225,10 @@ export default {
       });
     },
     compressName(str) {
-      if (str.length > 15) return str.substr(0, 10) + "..." + str.substr(str.length - 5, str.length);
+      if (str.length > 15)
+        return (
+          str.substr(0, 10) + "..." + str.substr(str.length - 5, str.length)
+        );
       return str;
     },
   },

@@ -172,7 +172,7 @@
           </div>
           <div class="dropdown-menu-item">
             <i class="material-icons">settings_input_component</i>
-            <a @click.prevent="connectHardware">Connect Hardware Wallet</a>
+            <a @click.prevent="connectHardware">Connect to Metamask</a>
           </div>
           <div v-if="wallets.accounts.length > 0 && !wallets.active.isLedger">
             <div class="dropdown-menu-divider"></div>
@@ -190,7 +190,7 @@
           </div>
           <div class="dropdown-menu-item">
             <i class="material-icons">info</i>
-            <router-link to="/about">About Harmony</router-link>
+            <router-link to="/about">About Eurus</router-link>
           </div>
           <div v-if="wallets.accounts.length > 0">
             <div class="dropdown-menu-divider"></div>
