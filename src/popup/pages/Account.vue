@@ -47,14 +47,14 @@
             </option>
           </select>
         </div> -->
-        <div class="button-group">
+        <!-- <div class="button-group">
           <button class="outline" @click="$router.push('/deposit')" v-tooltip.top="'Deposit token'">
             Deposit
           </button>
           <button class="primary" @click="onSendClick" v-tooltip.top="'Send token'">
             Send
           </button>
-        </div>
+        </div> -->
         <div class="divider"></div>
         <div class="footer price-bar" v-if="tokenPrice">
           <marquee-text :duration="20">

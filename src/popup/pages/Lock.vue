@@ -1,10 +1,10 @@
 <template>
   <div class="lock-page">
     <div class="main-logo">
-      <img src="images/harmony-big.png" class="lock-logo" alt="Harmony" />
+      <img src="images/Eurus.svg" class="lock-logo" alt="Harmony" />
     </div>
     <div class="title">
-      <div class="brand-name">Harmony One Wallet</div>
+      <div class="brand-name">Eurus Wallet</div>
       <div class="version-info">{{ version }}</div>
     </div>
     <div class="unlock-caption">Unlock your wallet</div>
@@ -31,7 +31,7 @@
       <div class="lastopen-time-caption">{{ lastOpened }}</div>
     </div>
     <div class="footer credit-title">
-      <span>Developed by Harmony Team</span>
+      <span>Developed by Meta Air Labs Team</span>
     </div>
   </div>
 </template>

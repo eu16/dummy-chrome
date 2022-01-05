@@ -31,6 +31,15 @@
           :text="address"
           :correctLevel="3"
           :size="336"
+          logoSrc="images/Eurus.svg"
+          :logoScale="0.3"
+          colorDark="#059FDD"
+        ></vue-qr>
+<!-- 
+        <vue-qr
+          :text="address"
+          :correctLevel="3"
+          :size="336"
           logoSrc="images/logo-blue.png"
           :logoScale="0.2"
           :logoCornerRadius="35"
@@ -39,7 +48,7 @@
           colorLight="rgb(102, 237, 190)"
           colorDark="rgb(1, 174, 231)"
           bgSrc="images/logo-blue.png"
-        ></vue-qr>
+        ></vue-qr> -->
       </div>
       <notifications
         group="notify"

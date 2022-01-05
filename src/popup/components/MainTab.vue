@@ -5,13 +5,13 @@
     >
     <router-link
       :class="{ active: myroute.name == 'hrc20tokens' }"
-      to="/hrc20tokens"
+      to="/send"
       >Send</router-link
     >
     <router-link
       :class="{ active: myroute.name == 'hrc721tokens' }"
-      to="/hrc721tokens"
-      >Receive</router-link
+      to="/deposit"
+      >Deposit</router-link
     >
     <router-link to="/history"
       >Withdraw</router-link

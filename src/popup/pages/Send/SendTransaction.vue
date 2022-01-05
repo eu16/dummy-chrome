@@ -10,24 +10,25 @@
           </div>
           <div :class="{ row: !isToken }">
             <label class="input-label" :class="{ recipient: !isToken }">
-              Recipient Address or HNS
+              Wallet Address/Email
               <input
                 class="input-field"
                 type="text"
                 name="address"
                 ref="address"
-                placeholder="Recipient Address or HNS"
+                placeholder="Wallet Address or Email"
                 v-model="recipient"
+                style="width:340px"
               />
             </label>
-            <label v-if="!isToken" class="input-label shard" :class="{ disabled: isHRCToken }">
+            <!-- <label v-if="!isToken" class="input-label shard" :class="{ disabled: isHRCToken }">
               To Shard
               <select class="input-field" v-model="toShard" :disabled="isHRCToken">
                 <option v-for="shard in account.shardArray" :key="shard.shardID" :value="shard.shardID">{{
                   shard.shardID
                 }}</option>
               </select>
-            </label>
+            </label> -->
           </div>
           <div :class="{ row: !isToken }">
             <label class="input-label" :class="{ amount: !isToken }">
@@ -43,7 +44,8 @@
                 v-on:keyup.enter="showConfirmDialog"
               />
               <div class="maximum-label" v-show="!loading" @click="setMaxBalance">
-                Maximum: {{ getMaxBalance + " " + selectedToken.symbol }}
+                Maximum: {{ getMaxBalance + " EUN" }}
+                <!-- Maximum: {{ getMaxBalance + " " + selectedToken.symbol }} -->
               </div>
             </label>
             <label v-if="!isToken" class="input-label token">
@@ -82,17 +84,6 @@
               <input class="input-field" type="text" name="gasfee" ref="gasfee" readonly :value="`${getGasFee} ONE`" />
             </label>
           </div>
-          <label class="input-label" :class="{ disabled: isHRCToken }">
-            Input Data
-            <textarea
-              class="input-field input-data"
-              type="textarea"
-              name="inputdata"
-              placeholder="Please enter hexadecimal data (optional)"
-              v-model="inputData"
-              :disabled="isHRCToken"
-            />
-          </label>
           <button class="primary flex" type="submit">Send</button>
         </form>
       </div>
