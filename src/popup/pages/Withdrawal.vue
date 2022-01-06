@@ -88,18 +88,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import moment from "moment-timezone";
 import helper from "mixins/helper";
-import { Unit } from "@harmony-js/utils";
-import {
-  getTransfers,
-  getNetworkLink,
-  getTransactionCount,
-  removeDups,
-  getHarmony,
-} from "services/AccountService";
-import { decodeInput } from "services/Hrc20Service";
 import ExternalLink from "components/ExternalLink.vue";
 
 export default {
@@ -113,112 +102,7 @@ export default {
     txCount: 1,
     page: 0,
     loadMoreLoading: true,
-    // token: {
-    //   "EUN": 'EUN',
-    //   "ETH": "ETH"
-    // }
   }),
-
-  // computed: mapState({
-  //   address: (state) => state.wallets.active.address,
-  //   history: (state) => state.account.history,
-  // }),
-
-  // async mounted() {
-  //   this.$store.commit("loading", true);
-  //   await this.loadHistory();
-  // },
-
-  // methods: {
-  //   async pushHistory(transactions) {
-  //     let txns = [];
-  //     for (const txn of removeDups(transactions)) {
-  //       const params = await decodeInput(txn.to, txn.input);
-  //       const result = {
-  //         from: txn.from,
-  //         to: params ? params.to : txn.to,
-  //         amount: params
-  //           ? params.amount
-  //           : new Unit(txn.value)
-  //               .asWei()
-  //               .toEther()
-  //               .toString(),
-  //         hash: txn.hash,
-  //         symbol: params ? params.symbol : "ONE",
-  //         timestamp: txn.timestamp,
-  //         shardID: txn.shardID,
-  //         toShardID: txn.toShardID,
-  //       };
-  //       txns.push(result);
-  //     }
-  //     this.$store.commit("account/pushHistory", txns);
-  //   },
-  //   async loadHistory() {
-  //     this.$store.commit("account/initHistory");
-  //     this.txCount = await getTransactionCount(this.address);
-  //     this.page = 0;
-  //     const transfersData = await getTransfers(
-  //       this.address,
-  //       this.page,
-  //       this.limit
-  //     );
-  //     await this.pushHistory(transfersData.transactions);
-  //     this.$store.commit("loading", false);
-  //   },
-
-  //   async loadMore(e) {
-  //     e.preventDefault();
-  //     this.loadMoreLoading = true;
-  //     this.page += 1;
-  //     const transfersData = await getTransfers(
-  //       this.address,
-  //       this.page,
-  //       this.limit
-  //     );
-  //     await this.pushHistory(transfersData.transactions);
-  //     // BUG: hmy_getTransactionCount does not return correct count, so use this to stop showing "LOAD MORE"
-  //     if (transfersData.transactions.length == 0) {
-  //       this.txCount = this.history.length;
-  //       //console.log(this.txCount, this.history.length);
-  //     }
-
-  //     this.loadMoreLoading = false;
-  //   },
-
-  //   async refreshHistory() {
-  //     this.$store.commit("loading", true);
-  //     await this.loadHistory();
-  //   },
-
-  //   getTransferLink(hash) {
-  //     const path = "/tx/" + hash;
-
-  //     return getNetworkLink(path);
-  //   },
-
-  //   isOutgoingTransfer(transfer) {
-  //     return transfer.from === this.address;
-  //   },
-
-  //   formatTimestamp(timestamp) {
-  //     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-  //     return moment(timestamp)
-  //       .tz(timezone)
-  //       .format("MM/DD/YYYY HH:mm:ss z");
-  //   },
-  //   formatTokenAmount(transfer) {
-  //     return transfer.amount + " " + transfer.symbol;
-  //   },
-  //   formatShard(transfer) {
-  //     return (
-  //       "Shard " +
-  //       transfer.shardID.toString() +
-  //       " to Shard " +
-  //       transfer.toShardID.toString()
-  //     );
-  //   },
-  // },
 };
 </script>
 

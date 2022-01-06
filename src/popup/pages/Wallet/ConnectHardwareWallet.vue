@@ -13,13 +13,13 @@
       <div v-if="scene === 1">
         <h3>Connect to Metamask</h3>
         <span class="form-label"
-          >Please plug in your Ledger Nano S and open the Harmony App.</span
+          >If you already have an account with Metamask you can connect your wallet directly via Metamask</span
         >
-        <div class="wallet-group">
+        <!-- <div class="wallet-group">
           <button class="but-ledger" @click="connect">
             <img src="images/ledger.svg" alt="Ledger" />
           </button>
-        </div>
+        </div> -->
         <div class="button-group">
           <button
             v-show="wallets.accounts.length > 0"

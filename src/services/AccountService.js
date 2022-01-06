@@ -80,6 +80,8 @@ export async function decryptKeyStore(password, keystore) {
   var privateKey;
   try {
     privateKey = await decryptPhrase(JSON.parse(keystore), password);
+    console.log("privateKey", privateKey)
+    console.log("JSON.parse(keystore)", JSON.parse(keystore))
   } catch (e) {
     console.error("decryptKeyStore-->", e);
     return false;

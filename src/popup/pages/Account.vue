@@ -59,18 +59,18 @@
         <div class="box-label">Account Balance</div>
 
         <div class="box-balance">
-          12.03928
-          <span class="box-balance-code">EUN</span>
+          12.039
+          <span class="box-balance-code">EUN</span><img src='tokenIcons/eun.svg' style="width:15px; margin-left:5px"/>
         </div>
         <div class="divider"></div>
         <div class="box-balance">
           0.0229783
-          <span class="box-balance-code">ETH</span>
+          <span class="box-balance-code">ETH</span><img src='tokenIcons/eth.svg' style="width:15px; margin-left:5px"/>
         </div>
         <div class="divider"></div>
         <div class="box-balance">
-          10.092318
-          <span class="box-balance-code">USDT</span>
+          10.0923
+          <span class="box-balance-code">USDT</span><img src='tokenIcons/usdt.svg' style="width:15px; margin-left:5px"/>
         </div>
         <!-- <div class="box-usd-balance">
           <span v-if="!tokenPrice">---</span>

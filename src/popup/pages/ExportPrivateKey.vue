@@ -3,11 +3,12 @@
     <app-header subtitle="Export Private Key" />
     <main class="main">
       <div class="main-logo">
-        <img
+        <!-- <img
           :class="wallet ? `medium` : ``"
           src="images/harmony.png"
           alt="Harmony"
-        />
+        /> -->
+        <img :class="wallet ? `medium` : ``" src="images/Eurus.svg" alt="Harmony" style="max-width:130px; padding:20px" />
       </div>
       <div v-if="scene === 2">
         <h3 class="center">{{ name }}</h3>
