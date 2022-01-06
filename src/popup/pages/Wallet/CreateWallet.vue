@@ -38,6 +38,18 @@
         </div>
       </div>
       <div v-else-if="scene === 2">
+              
+        <label class="input-label">
+          Email
+          <input
+            class="input-field"
+            type="email"
+            name="email"
+            ref="email"
+            v-model="password"
+            placeholder="Enter your email"
+          />
+        </label>
         <label class="input-label">
           Password
           <input
