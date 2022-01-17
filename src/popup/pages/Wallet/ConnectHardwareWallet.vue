@@ -11,7 +11,7 @@
         <img src="images/Eurus.svg" alt="Harmony" style="max-width:130px; padding:20px" />
       </div>
       <div v-if="scene === 1">
-        <h3>Connect to Metamask</h3>
+        <h3>{{ $t("login.login_with_metamask") }}</h3>
         <span class="form-label"
           >If you already have an account with Metamask you can connect your wallet directly via Metamask</span
         >
@@ -26,7 +26,7 @@
             class="outline"
             @click="$router.push('/home')"
           >
-            Cancel
+            {{ $t("common.cancel") }}
           </button>
           <button
             class="primary"

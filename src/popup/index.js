@@ -1,7 +1,8 @@
 import Vue from "vue";
 import App from "./App.vue";
 import store from "./store";
-import router from "./router";
+import router from "./router"
+import i18n from "./i18n"
 import { sync } from "vuex-router-sync";
 import vClickOutside from "v-click-outside";
 import VueClipboard from "vue-clipboard2";
@@ -68,6 +69,7 @@ Vue.use(VModal, {
 });
 
 new Vue({
+  i18n,
   store,
   router,
   render: (h) => h(App),

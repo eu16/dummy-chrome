@@ -3,10 +3,10 @@
     <app-header headerTab="create-tab" />
     <main class="main">
       <div class="main-logo" v-if="scene === 1 || scene === 4">
-        <img src="images/Eurus.svg" alt="Harmony" style="max-width:130px; padding:20px" />
+        <img src="images/Eurus.svg" alt="Eurus" style="max-width:130px; padding:20px" />
       </div>
       <div v-if="scene === 1">
-        <label class="input-label account-name">
+        <!-- <label class="input-label account-name">
           Account Name
           <input
             class="input-field"
@@ -17,6 +17,40 @@
             placeholder="Input the account name"
             v-on:keyup.enter="createName"
           />
+        </label> -->
+        <label class="input-label">
+          {{ $t("common.email") }}
+          <input
+            class="input-field"
+            type="email"
+            name="email"
+            ref="email"
+            v-model="email"
+            :placeholder="$t('login.enter_email')"
+            v-on:keyup.enter="createName"
+          />
+        </label>
+        <label class="input-label">
+          {{ $t("common.confirmloginpassword") }}
+          <input
+            class="input-field"
+            type="password"
+            name="password"
+            ref="password"
+            v-model="password"
+            :placeholder="$t('login.enter_password')"
+          />
+        </label>
+        <label class="input-label">
+          {{ $t("common.loginpassword") }}
+          <input
+            class="input-field"
+            type="password"
+            name="password_confirm"
+            ref="password_confirm"
+            v-model="password_confirm"
+            :placeholder="$t('login.enter_password')"
+          />
         </label>
 
         <div class="button-group">
@@ -25,13 +59,13 @@
             class="outline"
             @click="$router.push('/home')"
           >
-            Cancel
+            {{ $t("common.cancel") }}
           </button>
           <button
             @click="createName"
             class="primary"
             :class="!wallets.accounts.length ? 'flex' : ''"
-            :disabled="!name"
+            :disabled="!email || !password || !password_confirm "
           >
             Create
           </button>
@@ -39,40 +73,40 @@
       </div>
       <div v-else-if="scene === 2">
               
-        <label class="input-label">
+        <!-- <label class="input-label">
           Email
           <input
             class="input-field"
             type="email"
             name="email"
             ref="email"
-            v-model="password"
+            v-model="email"
             placeholder="Enter your email"
           />
-        </label>
+        </label> -->
         <label class="input-label">
-          Password
+          Payment Password
           <input
             class="input-field"
             type="password"
             name="password"
             ref="password"
             v-model="password"
-            placeholder="Input the password"
+            placeholder="Input your payment password"
           />
         </label>
         <label class="input-label">
-          Confirm the password
+          Confirm the payment password
           <input
             class="input-field"
             type="password"
             name="password_confirm"
             ref="password_confirm"
             v-model="password_confirm"
-            placeholder="Confirm the password"
+            placeholder="Confirm your payment password"
           />
         </label>
-        <label class="input-label">
+        <!-- <label class="input-label">
           Seed Phrase
           <a class="copy-tag" @click.prevent="copyToClipboard"
             >(Click here to copy)</a
@@ -84,11 +118,18 @@
             v-model="seed_phrase"
             placeholder="Seed Phrase"
           />
-        </label>
+        </label> -->
         <input type="checkbox" id="seedcheck" :value="agree" v-model="agree" />
         <label class="check-label" for="seedcheck"
-          >I understand that lost seeds cannot be recovered.</label
+          >By creating an account, you agree to our  <a
+            target="_blank"
+            href="https://www.eurus.network/support/terms-of-use/"
+            ><span>Terms & Conditions.</span></a
+          ></label
         >
+        <!-- <label class="check-label" for="seedcheck"
+          >I understand that lost seeds cannot be recovered.</label
+        > -->
         <div class="button-group">
           <button class="outline" @click="() => (scene = 1)">Back</button>
           <button class="primary" @click="confirmPassword" :disabled="!agree">
@@ -119,6 +160,8 @@ import {
   createAccountFromMnemonic,
 } from "services/AccountService";
 import { mapState } from "vuex";
+// import { setEmail } from "../../../services/utils/auth"
+// import { registerByEmail, setupPaymentWallet } from "../../../services/utils/api"
 
 export default {
   mixins: [account],
@@ -188,16 +231,117 @@ export default {
       });
     },
     createName() {
-      if (this.name === "") {
-        this.$notify({
-          group: "notify",
-          text: "Invalid name",
-        });
-        return;
-      }
+      // if (this.name === "") {
+      //   this.$notify({
+      //     group: "notify",
+      //     text: "Invalid name",
+      //   });
+      //   return;
+      // }
       this.seed_phrase = generatePhrase();
       this.scene = 2;
     },
+    // createName: async function () {
+    //   this.$store.dispatch("setAppIsLoading", true);
+    //   try {
+    //     let registerByEmailResult = await registerByEmail(
+    //       this.email.toLowerCase(),
+    //       this.password
+    //     );
+    //     if (
+    //       registerByEmailResult &&
+    //       registerByEmailResult.returnCode === 0 &&
+    //       registerByEmailResult.data &&
+    //       registerByEmailResult.data.userId
+    //     ) {
+    //       if (registerByEmailResult.data.code) {
+    //         alert(registerByEmailResult.data.code);
+    //       }
+    //       setEmail(this.form.email.toLowerCase());
+    //       this.$router.push({
+    //         name: "verify",
+    //         params: {
+    //           inputEmail: this.form.email.toLowerCase(),
+    //           inputPaymentPassword: this.form.pppassword,
+    //           inputUserId: registerByEmailResult.data.userId,
+    //           verificationType: constants.verificationType.REGISTER,
+    //         },
+    //       });
+    //     } else if (
+    //       registerByEmailResult &&
+    //       registerByEmailResult.returnCode === -20
+    //     ) {
+    //       this.$message("Email Already Register", "warning");
+    //     } else if (
+    //       registerByEmailResult &&
+    //       registerByEmailResult.isServerMaintenance
+    //     ) {
+    //       this.$message(this.$i18n.t("common.server_maintenance"), "warning");
+    //     } else {
+    //       this.$message("Error", "warning");
+    //     }
+    //     this.$store.dispatch("setAppIsLoading", false);
+    //   } catch (err) {
+    //     console.error(err);
+    //     this.$store.dispatch("setAppIsLoading", false);
+    //     this.$message(this.$i18n.t("common.network_error"), "warning");
+    //   } finally {
+    //     this.$store.dispatch("setAppIsLoading", false);
+    //   }
+    // },
+    // setupPaymentWallet: async function (verificationResult, rsaPrivateKey) {
+    //   let token = verificationResult.data.token;
+    //   let email = verificationResult.data.email;
+    //   let paymentPassword = this.paymentPassword;
+    //   let userId = verificationResult.data.userId;
+    //   let encryptedMnemonicString = verificationResult.data.mnemonic;
+    //   let setupPaymentWalletResult = await setupPaymentWallet(
+    //     token,
+    //     email,
+    //     paymentPassword,
+    //     userId,
+    //     encryptedMnemonicString,
+    //     rsaPrivateKey
+    //   );
+    //   if (
+    //     setupPaymentWalletResult &&
+    //     setupPaymentWalletResult.returnCode === 0 &&
+    //     setupPaymentWalletResult.data.token &&
+    //     setupPaymentWalletResult.data.walletAddress &&
+    //     setupPaymentWalletResult.data.mainnetWalletAddress
+    //   ) {
+    //     setToken(setupPaymentWalletResult.data.token);
+    //     setAddress(setupPaymentWalletResult.data.walletAddress);
+    //     setEmail(email);
+    //     setAccounttype("centralized");
+    //     setMainnetWalletAddress(
+    //       setupPaymentWalletResult.data.mainnetWalletAddress
+    //     );
+
+    //     setOwnerWalletAddress(
+    //       setupPaymentWalletResult.paymentWallet.walletAddress
+    //     );
+    //     setOwnerWalletMnemonic(encryptedMnemonicString);
+
+    //     this.$store.dispatch("setAppIsLoading", false);
+    //     this.$router.push("/dashboard");
+    //     try {
+    //       firebase.analytics().logEvent("login", { method: "decentralized" });
+    //     } catch (e) {
+    //       console.error(e);
+    //     }
+    //   } else {
+    //     if (
+    //       setupPaymentWalletResult &&
+    //       setupPaymentWalletResult.returnCode === -5
+    //     ) {
+    //       this.$message("Server Busy", "warning");
+    //     } else {
+    //       this.$message("Error", "warning");
+    //     }
+    //     this.$router.back();
+    //   }
+    // },
   },
 };
 </script>

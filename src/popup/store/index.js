@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import VuexPersistence from "vuex-persist";
+import wallet from "./modules/wallet";
 import wallets from "./modules/wallets";
 import network from "./modules/network";
 import hrc20 from "./modules/hrc20";
@@ -19,6 +20,7 @@ const vuexLocal = new VuexPersistence({
 export default new Vuex.Store({
   getters,
   modules: {
+    wallet,
     wallets,
     network,
     account,

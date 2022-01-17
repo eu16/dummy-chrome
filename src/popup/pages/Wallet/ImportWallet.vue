@@ -15,7 +15,7 @@
           <div class="row-label">Select Type</div>
           <select class="input-field type-select" v-model="selectType">
             <option value="key">Private Key</option>
-            <option value="mnemonic">Mnemonic</option>
+            <option value="email">Email Address</option>
             <option value="keystore">Harmony Keystore (CLI)</option>
           </select>
         </div>
@@ -36,13 +36,24 @@
           </div>
           <div v-else>
             <label class="input-label">
-              Paste your Mnemonic
-              <textarea
+              {{ $t("common.email") }}
+              <input
                 class="input-field"
-                name="mnemonic"
-                ref="mnemonic"
-                v-model="mnemonic"
-                placeholder="Input the Mnemonic"
+                name="email"
+                ref="email"
+                v-model="email"
+                :placeholder="$t('login.enter_email')"
+              />
+            </label>
+            <label class="input-label">
+              {{ $t("common.confirmloginpassword") }}
+              <input
+                class="input-field"
+                type="password"
+                name="password"
+                ref="password"
+                v-model="password"
+                :placeholder="$t('login.enter_password')"
               />
             </label>
           </div>
@@ -57,7 +68,7 @@
             class="outline"
             @click="$router.push('/home')"
           >
-            Cancel
+            {{ $t("common.cancel") }}
           </button>
           <button
             class="primary"
@@ -158,6 +169,9 @@ import {
   decryptKeyStoreFromFile,
   validateMnemonic,
 } from "services/AccountService";
+// import { loginBySignature } from "../../../services/utils/api";
+// import { isValidEmail, isAlphaNum, checkTextLength } from "../../../services/utils";
+// import { setEmail } from "../../../services/utils/auth";
 
 export default {
   data: () => ({
@@ -327,6 +341,109 @@ export default {
         return false;
       }
       this.scene = 3;
+    },
+    importKey: async function () {
+      if (this.formFieldData.email == null) {
+        this.$message(this.$i18n.t("login.enter_email"), "warning");
+        // return this.formFieldData.email == null
+      } else if (this.formFieldData.password == null) {
+        this.$message(this.$i18n.t("login.enter_password"), "warning");
+      } else if (!isValidEmail(this.formFieldData.email)) {
+        this.$message(this.$i18n.t("login.invalid_email"), "warning");
+      } else if (!isAlphaNum(this.formFieldData.password)) {
+        this.$message(this.$i18n.t("login.error_two"), "warning");
+      } else if (!checkTextLength(this.formFieldData.password, 8, 20)) {
+        this.$message(this.$i18n.t("login.error_two"), "warning");
+      } else {
+        // return submit.isDisabled = false
+        this.$store.dispatch("setAppIsLoading", true);
+        try {
+          let loginBySignatureResult = await loginBySignature(
+            this.email.toLowerCase(),
+            this.password
+          );
+          if (
+            loginBySignatureResult &&
+            loginBySignatureResult.data &&
+            loginBySignatureResult.data.token &&
+            loginBySignatureResult.data.walletAddress &&
+            loginBySignatureResult.data.mainnetWalletAddress &&
+            loginBySignatureResult.data.ownerWalletAddress
+          ) {
+            setToken(loginBySignatureResult.data.token);
+            setAddress(loginBySignatureResult.data.walletAddress);
+            setEmail(this.email.toLowerCase());
+            setAccounttype("centralized");
+            setMainnetWalletAddress(
+              loginBySignatureResult.data.mainnetWalletAddress
+            );
+            setOwnerWalletAddress(
+              loginBySignatureResult.data.ownerWalletAddress
+            );
+            let doRegisterDevice = false;
+            if (loginBySignatureResult.data.mnemonic) {
+              try {
+                decryptMnemonic(
+                  loginBySignatureResult.data.mnemonic,
+                  getEurusPrivateKey()
+                );
+                setOwnerWalletMnemonic(loginBySignatureResult.data.mnemonic);
+                this.$store.dispatch("setAppIsLoading", false);
+                this.$router.push("/dashboard");
+                try {
+                   firebase.analytics().logEvent("login", {method: "centralized"});
+                } catch (e) {
+                  console.error(e);
+                }
+              } catch (error) {
+                console.log("decrypted Mnemonic error:", error);
+                doRegisterDevice = true;
+              }
+            } else {
+              doRegisterDevice = true;
+            }
+
+            if (doRegisterDevice) {
+              let registerDeviceResult = await registerDevice(
+                this.formFieldData.email.toLowerCase()
+              );
+              if (
+                registerDeviceResult &&
+                registerDeviceResult.returnCode === 0
+              ) {
+                if (
+                  registerDeviceResult.data &&
+                  registerDeviceResult.data.code
+                ) {
+                  alert(registerDeviceResult.data.code);
+                }
+                this.$store.dispatch("setAppIsLoading", false);
+                this.$router.push({
+                  name: "verify",
+                  params: {
+                    inputEmail: this.formFieldData.email.toLowerCase(),
+                    verificationType: constants.verificationType.LOGIN,
+                  },
+                });
+              }
+            }
+          } else if (
+            loginBySignatureResult &&
+            loginBySignatureResult.isServerMaintenance
+          ) {
+            this.$message(this.$i18n.t("common.server_maintenance"), "warning");
+          } else {
+            this.$store.dispatch("setAppIsLoading", false);
+            this.$message(this.$i18n.t("login.error_two"), "warning");
+          }
+        } catch (err) {
+          console.error(err);
+          this.$store.dispatch("setAppIsLoading", false);
+          this.$message(this.$i18n.t("common.network_error"), "warning");
+        } finally {
+          this.$store.dispatch("setAppIsLoading", false);
+        }
+      }
     },
   },
 };

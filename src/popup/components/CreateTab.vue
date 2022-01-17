@@ -1,13 +1,13 @@
 <template>
   <nav class="header-tabs">
-    <router-link :class="{ active: myroute.name == 'create-wallet' }" to="/create-wallet">Register Account</router-link>
-    <router-link :class="{ active: myroute.name == 'import-wallet' }" to="/import-wallet">Centralized Login</router-link>
+    <router-link :class="{ active: myroute.name == 'create-wallet' }" to="/create-wallet">{{ $t("register.create_an_account") }}</router-link>
+    <router-link :class="{ active: myroute.name == 'import-wallet' }" to="/import-wallet">{{ $t("login.login_with_central") }}</router-link>
     <router-link
       :class="{
         active: myroute.name == 'connect-hardware-wallet',
       }"
       to="/connect-hardware-wallet"
-    >Dentralized Login</router-link>
+    >{{ $t("login.login_with_metamask") }}</router-link>
   </nav>
 </template>
 
