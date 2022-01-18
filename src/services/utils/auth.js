@@ -1,5 +1,8 @@
 import store from "/src/popup/store"
 
+const EurusDeviceObjects = 'EurusDeviceObjects'
+const deviceObjectsAesKey = process.env.VUE_APP_DEVICE_OBJECT_AES_KEY
+
 export function getAppVersion() {
     return '1.0.1'
 }

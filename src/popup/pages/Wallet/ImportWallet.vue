@@ -8,19 +8,23 @@
           alt="Harmony"
           :class="{ 'logo-md': selectType === 'keystore' && scene === 2 }"
         /> -->
-        <img src="images/Eurus.svg" alt="Harmony" style="max-width:130px; padding:20px"/>
+        <img
+          src="images/Eurus.svg"
+          alt="Harmony"
+          style="max-width: 130px; padding: 20px"
+        />
       </div>
       <div v-if="scene === 1">
         <div class="type-row">
           <div class="row-label">Select Type</div>
           <select class="input-field type-select" v-model="selectType">
-            <option value="key">Private Key</option>
-            <option value="email">Email Address</option>
+            <!-- <option value="key">Private Key</option> -->
+            <option value="email"> {{ $t("common.email") }}</option>
             <option value="keystore">Harmony Keystore (CLI)</option>
           </select>
         </div>
         <div v-if="selectType !== 'keystore'">
-          <div v-if="selectType === 'key'">
+          <!-- <div v-if="selectType === 'key'">
             <label class="input-label big-label">
               Paste your private Key
               <input
@@ -33,8 +37,8 @@
                 v-on:keyup.enter="importKey"
               />
             </label>
-          </div>
-          <div v-else>
+          </div> -->
+          <div>
             <label class="input-label">
               {{ $t("common.email") }}
               <input
@@ -169,13 +173,14 @@ import {
   decryptKeyStoreFromFile,
   validateMnemonic,
 } from "services/AccountService";
-// import { loginBySignature } from "../../../services/utils/api";
+import { loginBySignature } from "../../../services/utils/api";
 // import { isValidEmail, isAlphaNum, checkTextLength } from "../../../services/utils";
 // import { setEmail } from "../../../services/utils/auth";
 
 export default {
   data: () => ({
     name: "",
+    email: "",
     password: "",
     keystorepass: "",
     password_confirm: "",
@@ -195,255 +200,268 @@ export default {
     onSelectFile(event) {
       this.file = event.target.files[0];
     },
-    async importKey() {
-      if (this.selectType === "key") {
-        if (!validatePrivateKey(this.privateKey)) {
-          this.$notify({
-            group: "notify",
-            type: "error",
-            text: "Please enter a valid private key",
-          });
-          return false;
-        }
-      }
-      if (this.selectType === "mnemonic") {
-        if (!validateMnemonic(this.mnemonic)) {
-          this.$notify({
-            group: "notify",
-            type: "error",
-            text: "Please enter a valid mnemonic",
-          });
-          return false;
-        }
-      }
-      if (this.selectType === "keystore") {
-        if (!this.file) {
-          this.$notify({
-            group: "notify",
-            type: "error",
-            text: "Please select a file",
-          });
-          return false;
-        } else {
-          const _this = this;
-          await new Promise((resolve, reject) => {
-            let reader = new window.FileReader();
-            reader.onload = function(event) {
-              try {
-                _this.keyFromFile = JSON.parse(event.target.result);
-                resolve();
-              } catch (err) {
-                _this.$notify({
-                  group: "notify",
-                  type: "error",
-                  text: "Keystore file invalid",
-                });
-                return false;
-              }
-            };
-            reader.readAsText(this.file);
-          });
-        }
-      }
-      this.scene = 2;
-    },
-    addAcc() {
-      this.$store.commit("wallets/addAccount", this.wallet);
-      alert(
-        "Your account is imported successfully. To continue, close this tab and use the extension."
-      );
-      chrome.tabs.getCurrent(function(tab) {
-        chrome.tabs.remove(tab.id, function() {});
-      });
-    },
-    async importAcc() {
-      if (!this.password) {
-        this.$notify({
-          group: "notify",
-          text: "Password is required",
-        });
-        return false;
-      }
-      if (!this.name) {
-        this.$notify({
-          group: "notify",
-          text: "Account name is required",
-        });
-        return false;
-      }
-      if (this.password.length < 8) {
-        this.$notify({
-          group: "notify",
-          type: "warn",
-          text: "Password must be longer than 8 characters",
-        });
-        return false;
-      } else if (this.password !== this.password_confirm) {
-        this.$notify({
-          group: "notify",
-          type: "error",
-          text: "Password doesn't match",
-        });
-        return false;
-      }
+    // async importKey() {
+    //   if (this.selectType === "key") {
+    //     if (!validatePrivateKey(this.privateKey)) {
+    //       this.$notify({
+    //         group: "notify",
+    //         type: "error",
+    //         text: "Please enter a valid private key",
+    //       });
+    //       return false;
+    //     }
+    //   }
+    //   if (this.selectType === "email") {
+    //     // if (!validateMnemonic(this.mnemonic)) {
+    //     //   this.$notify({
+    //     //     group: "notify",
+    //     //     type: "error",
+    //     //     text: "Please enter a valid mnemonic",
+    //     //   });
+    //     //   return false;
+    //     // }
+    //   }
+    //   if (this.selectType === "keystore") {
+    //     if (!this.file) {
+    //       this.$notify({
+    //         group: "notify",
+    //         type: "error",
+    //         text: "Please select a file",
+    //       });
+    //       return false;
+    //     } else {
+    //       const _this = this;
+    //       await new Promise((resolve, reject) => {
+    //         let reader = new window.FileReader();
+    //         reader.onload = function(event) {
+    //           try {
+    //             _this.keyFromFile = JSON.parse(event.target.result);
+    //             resolve();
+    //           } catch (err) {
+    //             _this.$notify({
+    //               group: "notify",
+    //               type: "error",
+    //               text: "Keystore file invalid",
+    //             });
+    //             return false;
+    //           }
+    //         };
+    //         reader.readAsText(this.file);
+    //       });
+    //     }
+    //   }
+    //   this.scene = 2;
+    // },
+    // addAcc() {
+    //   this.$store.commit("wallets/addAccount", this.wallet);
+    //   alert(
+    //     "Your account is imported successfully. To continue, close this tab and use the extension."
+    //   );
+    //   chrome.tabs.getCurrent(function(tab) {
+    //     chrome.tabs.remove(tab.id, function() {});
+    //   });
+    // },
+    // async importAcc() {
+    //   if (!this.password) {
+    //     this.$notify({
+    //       group: "notify",
+    //       text: "Password is required",
+    //     });
+    //     return false;
+    //   }
+    //   if (!this.name) {
+    //     this.$notify({
+    //       group: "notify",
+    //       text: "Account name is required",
+    //     });
+    //     return false;
+    //   }
+    //   if (this.password.length < 8) {
+    //     this.$notify({
+    //       group: "notify",
+    //       type: "warn",
+    //       text: "Password must be longer than 8 characters",
+    //     });
+    //     return false;
+    //   } else if (this.password !== this.password_confirm) {
+    //     this.$notify({
+    //       group: "notify",
+    //       type: "error",
+    //       text: "Password doesn't match",
+    //     });
+    //     return false;
+    //   }
 
-      if (this.selectType === "key") {
-        const oneAddr = getAddressFromPrivateKey(this.privateKey);
+    //   if (this.selectType === "key") {
+    //     const oneAddr = getAddressFromPrivateKey(this.privateKey);
 
-        const keystore = await encryptKeyStore(this.password, this.privateKey);
-        this.wallet = {
-          name: this.name,
-          address: oneAddr,
-          keystore,
-          isLedger: false,
-        };
-      } else if (this.selectType == "mnemonic") {
-        this.wallet = await createAccountFromMnemonic(
-          this.name,
-          this.mnemonic,
-          this.password
-        );
-        this.wallet = { ...this.wallet, isLedger: false };
-      } else {
-        const decryptResult = await decryptKeyStoreFromFile(
-          this.keystorepass,
-          this.keyFromFile
-        );
-        if (!decryptResult) {
-          this.$notify({
-            group: "notify",
-            type: "error",
-            text: "Keystore password is incorrect or file is invalid",
-          });
-          return false;
-        }
-        const encryptedKeyStore = await encryptKeyStore(
-          this.password,
-          decryptResult.privateKey
-        );
+    //     const keystore = await encryptKeyStore(this.password, this.privateKey);
+    //     this.wallet = {
+    //       name: this.name,
+    //       address: oneAddr,
+    //       keystore,
+    //       isLedger: false,
+    //     };
+    //   } else if (this.selectType == "mnemonic") {
+    //     this.wallet = await createAccountFromMnemonic(
+    //       this.name,
+    //       this.mnemonic,
+    //       this.password
+    //     );
+    //     this.wallet = { ...this.wallet, isLedger: false };
+    //   } else {
+    //     const decryptResult = await decryptKeyStoreFromFile(
+    //       this.keystorepass,
+    //       this.keyFromFile
+    //     );
+    //     if (!decryptResult) {
+    //       this.$notify({
+    //         group: "notify",
+    //         type: "error",
+    //         text: "Keystore password is incorrect or file is invalid",
+    //       });
+    //       return false;
+    //     }
+    //     const encryptedKeyStore = await encryptKeyStore(
+    //       this.password,
+    //       decryptResult.privateKey
+    //     );
 
-        this.wallet = {
-          name: this.name,
-          address: decryptResult.address,
-          keystore: encryptedKeyStore,
-          isLedger: false,
-        };
-      }
-      const acc = _.find(this.wallets.accounts, {
-        address: this.wallet.address,
-      });
-      if (acc) {
-        this.$notify({
-          group: "notify",
-          type: "error",
-          text: "Account already exists",
-        });
-        return false;
-      }
-      this.scene = 3;
-    },
+    //     this.wallet = {
+    //       name: this.name,
+    //       address: decryptResult.address,
+    //       keystore: encryptedKeyStore,
+    //       isLedger: false,
+    //     };
+    //   }
+    //   const acc = _.find(this.wallets.accounts, {
+    //     address: this.wallet.address,
+    //   });
+    //   if (acc) {
+    //     this.$notify({
+    //       group: "notify",
+    //       type: "error",
+    //       text: "Account already exists",
+    //     });
+    //     return false;
+    //   }
+    //   this.scene = 3;
+    // },
     importKey: async function () {
-      if (this.formFieldData.email == null) {
-        this.$message(this.$i18n.t("login.enter_email"), "warning");
-        // return this.formFieldData.email == null
-      } else if (this.formFieldData.password == null) {
-        this.$message(this.$i18n.t("login.enter_password"), "warning");
-      } else if (!isValidEmail(this.formFieldData.email)) {
-        this.$message(this.$i18n.t("login.invalid_email"), "warning");
-      } else if (!isAlphaNum(this.formFieldData.password)) {
-        this.$message(this.$i18n.t("login.error_two"), "warning");
-      } else if (!checkTextLength(this.formFieldData.password, 8, 20)) {
-        this.$message(this.$i18n.t("login.error_two"), "warning");
-      } else {
-        // return submit.isDisabled = false
-        this.$store.dispatch("setAppIsLoading", true);
-        try {
+      if (this.selectType === "email") {
+         try {
           let loginBySignatureResult = await loginBySignature(
             this.email.toLowerCase(),
             this.password
           );
-          if (
-            loginBySignatureResult &&
-            loginBySignatureResult.data &&
-            loginBySignatureResult.data.token &&
-            loginBySignatureResult.data.walletAddress &&
-            loginBySignatureResult.data.mainnetWalletAddress &&
-            loginBySignatureResult.data.ownerWalletAddress
-          ) {
-            setToken(loginBySignatureResult.data.token);
-            setAddress(loginBySignatureResult.data.walletAddress);
-            setEmail(this.email.toLowerCase());
-            setAccounttype("centralized");
-            setMainnetWalletAddress(
-              loginBySignatureResult.data.mainnetWalletAddress
-            );
-            setOwnerWalletAddress(
-              loginBySignatureResult.data.ownerWalletAddress
-            );
-            let doRegisterDevice = false;
-            if (loginBySignatureResult.data.mnemonic) {
-              try {
-                decryptMnemonic(
-                  loginBySignatureResult.data.mnemonic,
-                  getEurusPrivateKey()
-                );
-                setOwnerWalletMnemonic(loginBySignatureResult.data.mnemonic);
-                this.$store.dispatch("setAppIsLoading", false);
-                this.$router.push("/dashboard");
-                try {
-                   firebase.analytics().logEvent("login", {method: "centralized"});
-                } catch (e) {
-                  console.error(e);
-                }
-              } catch (error) {
-                console.log("decrypted Mnemonic error:", error);
-                doRegisterDevice = true;
-              }
-            } else {
-              doRegisterDevice = true;
-            }
-
-            if (doRegisterDevice) {
-              let registerDeviceResult = await registerDevice(
-                this.formFieldData.email.toLowerCase()
-              );
-              if (
-                registerDeviceResult &&
-                registerDeviceResult.returnCode === 0
-              ) {
-                if (
-                  registerDeviceResult.data &&
-                  registerDeviceResult.data.code
-                ) {
-                  alert(registerDeviceResult.data.code);
-                }
-                this.$store.dispatch("setAppIsLoading", false);
-                this.$router.push({
-                  name: "verify",
-                  params: {
-                    inputEmail: this.formFieldData.email.toLowerCase(),
-                    verificationType: constants.verificationType.LOGIN,
-                  },
-                });
-              }
-            }
-          } else if (
-            loginBySignatureResult &&
-            loginBySignatureResult.isServerMaintenance
-          ) {
-            this.$message(this.$i18n.t("common.server_maintenance"), "warning");
-          } else {
-            this.$store.dispatch("setAppIsLoading", false);
-            this.$message(this.$i18n.t("login.error_two"), "warning");
-          }
-        } catch (err) {
-          console.error(err);
-          this.$store.dispatch("setAppIsLoading", false);
-          this.$message(this.$i18n.t("common.network_error"), "warning");
-        } finally {
-          this.$store.dispatch("setAppIsLoading", false);
-        }
+          console.log("loginBySignatureResult", loginBySignatureResult)
+      } catch (e) {
+        console.log(e)
       }
+      }
+
+
+      // if (this.formFieldData.email == null) {
+      //   this.$message(this.$i18n.t("login.enter_email"), "warning");
+      //   // return this.formFieldData.email == null
+      // } else if (this.formFieldData.password == null) {
+      //   this.$message(this.$i18n.t("login.enter_password"), "warning");
+      // } else if (!isValidEmail(this.formFieldData.email)) {
+      //   this.$message(this.$i18n.t("login.invalid_email"), "warning");
+      // } else if (!isAlphaNum(this.formFieldData.password)) {
+      //   this.$message(this.$i18n.t("login.error_two"), "warning");
+      // } else if (!checkTextLength(this.formFieldData.password, 8, 20)) {
+      //   this.$message(this.$i18n.t("login.error_two"), "warning");
+      // } else {
+      //   // return submit.isDisabled = false
+      //   this.$store.dispatch("setAppIsLoading", true);
+      //   try {
+      //     let loginBySignatureResult = await loginBySignature(
+      //       this.email.toLowerCase(),
+      //       this.password
+      //     );
+      //     if (
+      //       loginBySignatureResult &&
+      //       loginBySignatureResult.data &&
+      //       loginBySignatureResult.data.token &&
+      //       loginBySignatureResult.data.walletAddress &&
+      //       loginBySignatureResult.data.mainnetWalletAddress &&
+      //       loginBySignatureResult.data.ownerWalletAddress
+      //     ) {
+      //       setToken(loginBySignatureResult.data.token);
+      //       setAddress(loginBySignatureResult.data.walletAddress);
+      //       setEmail(this.email.toLowerCase());
+      //       setAccounttype("centralized");
+      //       setMainnetWalletAddress(
+      //         loginBySignatureResult.data.mainnetWalletAddress
+      //       );
+      //       setOwnerWalletAddress(
+      //         loginBySignatureResult.data.ownerWalletAddress
+      //       );
+      //       let doRegisterDevice = false;
+      //       if (loginBySignatureResult.data.mnemonic) {
+      //         try {
+      //           decryptMnemonic(
+      //             loginBySignatureResult.data.mnemonic,
+      //             getEurusPrivateKey()
+      //           );
+      //           setOwnerWalletMnemonic(loginBySignatureResult.data.mnemonic);
+      //           this.$store.dispatch("setAppIsLoading", false);
+      //           this.$router.push("/dashboard");
+      //           try {
+      //              firebase.analytics().logEvent("login", {method: "centralized"});
+      //           } catch (e) {
+      //             console.error(e);
+      //           }
+      //         } catch (error) {
+      //           console.log("decrypted Mnemonic error:", error);
+      //           doRegisterDevice = true;
+      //         }
+      //       } else {
+      //         doRegisterDevice = true;
+      //       }
+
+      //       if (doRegisterDevice) {
+      //         let registerDeviceResult = await registerDevice(
+      //           this.formFieldData.email.toLowerCase()
+      //         );
+      //         if (
+      //           registerDeviceResult &&
+      //           registerDeviceResult.returnCode === 0
+      //         ) {
+      //           if (
+      //             registerDeviceResult.data &&
+      //             registerDeviceResult.data.code
+      //           ) {
+      //             alert(registerDeviceResult.data.code);
+      //           }
+      //           this.$store.dispatch("setAppIsLoading", false);
+      //           this.$router.push({
+      //             name: "verify",
+      //             params: {
+      //               inputEmail: this.formFieldData.email.toLowerCase(),
+      //               verificationType: constants.verificationType.LOGIN,
+      //             },
+      //           });
+      //         }
+      //       }
+      //     } else if (
+      //       loginBySignatureResult &&
+      //       loginBySignatureResult.isServerMaintenance
+      //     ) {
+      //       this.$message(this.$i18n.t("common.server_maintenance"), "warning");
+      //     } else {
+      //       this.$store.dispatch("setAppIsLoading", false);
+      //       this.$message(this.$i18n.t("login.error_two"), "warning");
+      //     }
+      //   } catch (err) {
+      //     console.error(err);
+      //     this.$store.dispatch("setAppIsLoading", false);
+      //     this.$message(this.$i18n.t("common.network_error"), "warning");
+      //   } finally {
+      //     this.$store.dispatch("setAppIsLoading", false);
+      //   }
+      // }
     },
   },
 };

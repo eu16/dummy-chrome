@@ -7,13 +7,13 @@
       </div> -->
       <div :class="{ row: !isToken }">
             <label class="input-label" :class="{ recipient: !isToken }">
-              Wallet Address/Email
+              {{ $t("transfer.to") }}
               <input
                 class="input-field"
                 type="text"
                 name="address"
                 ref="address"
-                placeholder="Wallet Address or Email"
+                :placeholder="$t('transfer.receiving_info')"
                 v-model="recipient"
                 style="width:340px"
               />
@@ -29,7 +29,7 @@
           </div>
           <div :class="{ row: !isToken }">
             <label class="input-label" :class="{ amount: !isToken }">
-              Amount
+              {{ $t("common.amount") }}
               <input
                 class="input-field"
                 type="number"

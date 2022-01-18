@@ -8,12 +8,17 @@
           :class="{ 'logo-md': scene === 2 ? true : false }"
           alt="Harmony"
         /> -->
-        <img src="images/Eurus.svg" alt="Harmony" style="max-width:130px; padding:20px" />
+        <img
+          src="images/Eurus.svg"
+          alt="Harmony"
+          style="max-width: 130px; padding: 20px"
+        />
       </div>
       <div v-if="scene === 1">
         <h3>{{ $t("login.login_with_metamask") }}</h3>
         <span class="form-label"
-          >If you already have an account with Metamask you can connect your wallet directly via Metamask</span
+          >If you already have an account with Metamask you can connect your
+          wallet directly via Metamask</span
         >
         <!-- <div class="wallet-group">
           <button class="but-ledger" @click="connect">
@@ -76,7 +81,8 @@
 
 <script>
 import { mapState } from "vuex";
-import { connectLedgerApp } from "services/LedgerService";
+// import { connectLedgerApp } from "services/LedgerService";
+// import { importWallet, getAccount } from "../../../services/utils/web3.js";
 
 export default {
   data: () => ({
@@ -107,24 +113,64 @@ export default {
       alert(
         "Your ledger account is loaded. To continue, close this tab and use the extension."
       );
-      chrome.tabs.getCurrent(function(tab) {
-        chrome.tabs.remove(tab.id, function() {});
+      chrome.tabs.getCurrent(function (tab) {
+        chrome.tabs.remove(tab.id, function () {});
       });
     },
-    connect() {
-      connectLedgerApp()
-        .then((address) => {
-          this.address = address;
-          this.scene = 2;
-        })
-        .catch((err) => {
-          this.$notify({
-            group: "notify",
-            type: "error",
-            text: err,
-          });
-        });
+    connect: async function () {
+      try {
+        const { ethereum } = window;
+        console.log(ethereum)
+        // Will open the MetaMask UI
+        // You should disable this button while the request is pending!
+        await window.ethereum.request({ method: "eth_requestAccounts" });
+      } catch (error) {
+        console.error(error);
+      }
     },
+    // connect: async function () {
+    //   let accounts = await getAccount();
+    //   let accountAddress = accounts[0];
+    //   setAddress(accountAddress);
+    //   try {
+    //     let importWalletResponse = await importWallet(accountAddress);
+    //     if (
+    //       importWalletResponse &&
+    //       importWalletResponse.data &&
+    //       importWalletResponse.data.data &&
+    //       importWalletResponse.data.data.token
+    //     ) {
+    //       setToken(importWalletResponse.data.data.token);
+    //       setAccounttype("decentralized");
+    //       this.$store.dispatch("setAppIsLoading", false);
+    //       this.$router.push("/home");
+    //     } else if (
+    //       importWalletResponse &&
+    //       importWalletResponse.status === 404
+    //     ) {
+    //       // this.$message(
+    //       //   this.$i18n.t("common.server_maintenance"),
+    //       //   "warning"
+    //       // );
+    //       console.log(this.$i18n.t("common.server_maintenance"));
+    //     } else {
+    //       // this.$message(
+    //       //   this.$i18n.t("common.network_error"),
+    //       //   "warning"
+    //       // );
+    //       console.log(this.$i18n.t("common.network_error"));
+    //     }
+    //   } catch (error) {
+    //     console.error("importWallet error:", error);
+    //     if (error && error.response && error.response.status === 404) {
+    //       // this.$message(
+    //       //   this.$i18n.t("common.server_maintenance"),
+    //       //   "warning"
+    //       // );
+    //       console.log(this.$i18n.t("common.server_maintenance"));
+    //     }
+    //   }
+    // },
   },
 };
 </script>

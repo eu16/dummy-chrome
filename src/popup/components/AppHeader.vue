@@ -168,11 +168,11 @@
           </div>
           <div class="dropdown-menu-item">
             <i class="material-icons">vertical_align_bottom</i>
-            <a @click.prevent="importAccount">Import Account</a>
+            <a @click.prevent="importAccount">{{ $t("login.import_wallet") }}</a>
           </div>
           <div class="dropdown-menu-item">
             <i class="material-icons">settings_input_component</i>
-            <a @click.prevent="connectHardware">Connect to Metamask</a>
+            <a @click.prevent="connectHardware">{{ $t("login.login_with_metamask") }}</a>
           </div>
           <div v-if="wallets.accounts.length > 0 && !wallets.active.isLedger">
             <div class="dropdown-menu-divider"></div>
@@ -184,8 +184,8 @@
           <div class="dropdown-menu-divider"></div>
           <div v-if="wallets.accounts.length > 0">
             <div class="dropdown-menu-item">
-              <i class="material-icons">settings</i>
-              <router-link to="/settings">Settings</router-link>
+              <i class="material-icons">{{ $t("common.settings") }}</i>
+              <router-link to="/settings">{{ $t("common.settings") }}</router-link>
             </div>
           </div>
           <div class="dropdown-menu-item">

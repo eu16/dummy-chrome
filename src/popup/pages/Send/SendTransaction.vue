@@ -10,13 +10,13 @@
           </div>
           <div :class="{ row: !isToken }">
             <label class="input-label" :class="{ recipient: !isToken }">
-              Wallet Address/Email
+              {{ $t("transfer.to") }}
               <input
                 class="input-field"
                 type="text"
                 name="address"
                 ref="address"
-                placeholder="Wallet Address or Email"
+                :placeholder="$t('transfer.receiving_info')"
                 v-model="recipient"
                 style="width:340px"
               />
@@ -32,14 +32,14 @@
           </div>
           <div :class="{ row: !isToken }">
             <label class="input-label" :class="{ amount: !isToken }">
-              Amount
+              {{ $t("common.amount") }}
               <input
                 class="input-field"
                 type="number"
                 name="amount"
                 ref="amount"
                 step="any"
-                placeholder="Amount"
+                :placeholder="$t('common.amount')"
                 v-model="amount"
                 v-on:keyup.enter="showConfirmDialog"
               />
@@ -49,7 +49,7 @@
               </div>
             </label>
             <label v-if="!isToken" class="input-label token">
-              Token
+              {{ $t("transfer.asset") }}
               <select class="input-field" v-model="selectedToken">
                 <option v-for="(token, index) in tokenList" :key="index" :value="token">{{ token.symbol }}</option>
               </select>

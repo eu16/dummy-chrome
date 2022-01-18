@@ -1,7 +1,13 @@
 import store from '/src/popup/store'
 import ethCrypto from "eth-crypto";
 import axios from "axios";
-import { getEurusApiUrl } from "./network"
+import {
+    getEurusApiUrl
+} from "./network"
+import {
+    createEurusDeviceObject,
+    getEurusDeviceId
+} from "./auth"
 
 const eurusApiUrl = getEurusApiUrl();
 
@@ -49,7 +55,9 @@ export async function registerByEmail(email, loginPassword) {
             const headers = {
                 "Content-Type": "application/json",
             };
-            let response = await axios.post(url, request, { headers: headers });
+            let response = await axios.post(url, request, {
+                headers: headers
+            });
             if (response && response.status === 200) {
                 if (response.data) {
                     let data = response.data;
@@ -57,15 +65,15 @@ export async function registerByEmail(email, loginPassword) {
                 }
             } else if (response && response.status === 404) {
                 result = {
-                    result: false, 
+                    result: false,
                     isServerMaintenance: true
                 };
             }
         } catch (error) {
             console.error("registerByEmail error:", error);
-            if (error && error.response && error.response.status === 404){
+            if (error && error.response && error.response.status === 404) {
                 result = {
-                    result: false, 
+                    result: false,
                     isServerMaintenance: true
                 };
             }
@@ -77,9 +85,11 @@ export async function registerByEmail(email, loginPassword) {
 
 export async function loginBySignature(email, loginPassword) {
     let result = null;
-    createEurusDeviceObject(email);
+    // createEurusDeviceObject(email);
+    console.log("trying")
     if (getEurusDeviceId(email)) {
         try {
+            console.log("tried")
             let loginWallet = generateWallet(email + loginPassword);
             const walletAddress = loginWallet.walletAddress
                 .substring(2)
@@ -118,7 +128,10 @@ export async function loginBySignature(email, loginPassword) {
             const headers = {
                 "Content-Type": "application/json",
             };
-            let response = await axios.post(url, request, { headers: headers });
+            let response = await axios.post(url, request, {
+                headers: headers
+            });
+            console.log("response", response)
             if (response && response.status === 200) {
                 if (response.data) {
                     let data = response.data;
@@ -126,15 +139,15 @@ export async function loginBySignature(email, loginPassword) {
                 }
             } else if (response && response.status === 404) {
                 result = {
-                    result: false, 
+                    result: false,
                     isServerMaintenance: true
                 };
             }
         } catch (error) {
             console.error("loginBySignature error:", error);
-            if (error && error.response && error.response.status === 404){
+            if (error && error.response && error.response.status === 404) {
                 result = {
-                    result: false, 
+                    result: false,
                     isServerMaintenance: true
                 };
             }

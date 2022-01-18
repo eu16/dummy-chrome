@@ -6,15 +6,15 @@
     <router-link
       :class="{ active: myroute.name == 'hrc20tokens' }"
       to="/send"
-      >Send</router-link
+      >{{ $t("common.send") }}</router-link
     >
     <router-link
       :class="{ active: myroute.name == 'hrc721tokens' }"
       to="/deposit"
-      >Deposit</router-link
+      >{{ $t("common.receive") }}</router-link
     >
     <router-link to="/withdrawal"
-      >Withdraw</router-link
+      >{{ $t("common.withdraw") }}</router-link
     >
     <!-- <router-link
       :class="{ active: myroute.name == 'hrc20tokens' }"

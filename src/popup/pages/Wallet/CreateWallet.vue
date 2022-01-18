@@ -67,7 +67,7 @@
             :class="!wallets.accounts.length ? 'flex' : ''"
             :disabled="!email || !password || !password_confirm "
           >
-            Create
+            {{ $t("common.create") }}
           </button>
         </div>
       </div>
@@ -85,25 +85,25 @@
           />
         </label> -->
         <label class="input-label">
-          Payment Password
+          {{ $t("passwordType.payment_pw") }}
           <input
             class="input-field"
             type="password"
             name="password"
             ref="password"
             v-model="password"
-            placeholder="Input your payment password"
+            :placeholder="$t('register.enter_pp')"
           />
         </label>
         <label class="input-label">
-          Confirm the payment password
+          {{ $t("common.confirmPaymentpassword") }}
           <input
             class="input-field"
             type="password"
             name="password_confirm"
             ref="password_confirm"
             v-model="password_confirm"
-            placeholder="Confirm your payment password"
+            :placeholder="$t('passwordType.confirm_new_payment_pw')"
           />
         </label>
         <!-- <label class="input-label">
@@ -121,10 +121,10 @@
         </label> -->
         <input type="checkbox" id="seedcheck" :value="agree" v-model="agree" />
         <label class="check-label" for="seedcheck"
-          >By creating an account, you agree to our  <a
+          >{{ $t("termsAndConditions.creation") }}  <a
             target="_blank"
             href="https://www.eurus.network/support/terms-of-use/"
-            ><span>Terms & Conditions.</span></a
+            ><span>{{ $t("termsAndConditions.agreementTerms") }}.</span></a
           ></label
         >
         <!-- <label class="check-label" for="seedcheck"
