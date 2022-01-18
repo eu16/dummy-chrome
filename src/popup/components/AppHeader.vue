@@ -184,7 +184,7 @@
           <div class="dropdown-menu-divider"></div>
           <div v-if="wallets.accounts.length > 0">
             <div class="dropdown-menu-item">
-              <i class="material-icons">{{ $t("common.settings") }}</i>
+              <i class="material-icons">settings</i>
               <router-link to="/settings">{{ $t("common.settings") }}</router-link>
             </div>
           </div>

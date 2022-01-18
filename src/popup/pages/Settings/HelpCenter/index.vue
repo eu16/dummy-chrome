@@ -7,45 +7,38 @@
         v-for="item in options"
         :key="item.title"
         @click="item.handler"
-      >{{ item.title }}</div>
-      <pindigits-modal />
-      <locktimer-modal />
+      >
+        {{ item.title }}
+      </div>
+      <!-- <pindigits-modal />
+      <locktimer-modal /> -->
     </main>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
-import PindigitsModal from "./PindigitsModal";
-import LocktimerModal from "./LocktimerModal";
+// import PindigitsModal from "./PindigitsModal";
+// import LocktimerModal from "./LocktimerModal";
 export default {
   data() {
     return {
       options: [
         {
-          title: "Change the Login Password",
-          handler: () => this.showPindigitsModal(),
+          title: "Frequently Asked Questions",
+          handler: () => window.open("https://www.eurus.network/support/eurus-wallet/")
         },
         {
-          title: "Change the Payment Password",
+          title: "Customer Service",
           handler: () => this.showLockTimerModal(),
         },
-        { title: "Change the PIN Code", handler: () => this.changePincode() },
-        {
-          title: "Change the PIN Code digits",
-          handler: () => this.showPindigitsModal(),
-        },
-        {
-          title: "Set the lock timer",
-          handler: () => this.showLockTimerModal(),
-        },
+        { title: "Terms & Conditions", handler: () => window.open("https://www.eurus.network/support/terms-of-use/") },
       ],
     };
   },
-  components: {
-    PindigitsModal,
-    LocktimerModal,
-  },
+  //   components: {
+  //     PindigitsModal,
+  //     LocktimerModal,
+  //   },
   methods: {
     changePincode() {
       this.$router.push("/settings/security/pincode");

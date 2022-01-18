@@ -15,15 +15,15 @@
         />
       </div>
       <div v-if="scene === 1">
-        <div class="type-row">
+        <!-- <div class="type-row">
           <div class="row-label">Select Type</div>
           <select class="input-field type-select" v-model="selectType">
-            <!-- <option value="key">Private Key</option> -->
+            <option value="key">Private Key</option>
             <option value="email"> {{ $t("common.email") }}</option>
             <option value="keystore">Harmony Keystore (CLI)</option>
           </select>
-        </div>
-        <div v-if="selectType !== 'keystore'">
+        </div> -->
+        <!-- <div v-if="selectType !== 'keystore'"> -->
           <!-- <div v-if="selectType === 'key'">
             <label class="input-label big-label">
               Paste your private Key
@@ -61,10 +61,10 @@
               />
             </label>
           </div>
-        </div>
-        <div v-else class="file-row">
+        <!-- </div> -->
+        <!-- <div v-else class="file-row">
           <input type="file" class="file-field" @change="onSelectFile" />
-        </div>
+        </div> -->
 
         <div class="button-group">
           <button

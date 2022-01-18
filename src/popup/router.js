@@ -23,7 +23,7 @@ import ExportPrivateKey from "./pages/ExportPrivateKey.vue";
 import About from "./pages/About.vue";
 import Settings from "./pages/Settings/index.vue";
 import Security from "./pages/Settings/Security/index.vue";
-import Contacts from "./pages/Settings/Contacts/index.vue";
+import HelpCenter from "./pages/Settings/HelpCenter/index.vue";
 import PincodeModal from "./pages/Settings/Security/PincodeModal.vue";
 
 import store from "./store";
@@ -231,9 +231,9 @@ const router = new Router({
       },
     },
     {
-      path: "/settings/contacts",
-      name: "contacts",
-      component: Contacts,
+      path: "/settings/helpcenter",
+      name: "helpcenter",
+      component: HelpCenter,
       meta: {
         requiredAccount: true,
         authenticate: true,
