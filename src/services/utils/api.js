@@ -8,8 +8,11 @@ import {
     createEurusDeviceObject,
     getEurusDeviceId
 } from "./auth"
+import { generateWallet } from './web3';
+import { uuidv4 } from './index'
 
-const eurusApiUrl = getEurusApiUrl();
+// const eurusApiUrl = getEurusApiUrl();
+const eurusApiUrl = "http://besudevapi.eurus.network:80";
 
 
 export async function registerByEmail(email, loginPassword) {
@@ -86,10 +89,8 @@ export async function registerByEmail(email, loginPassword) {
 export async function loginBySignature(email, loginPassword) {
     let result = null;
     // createEurusDeviceObject(email);
-    console.log("trying")
-    if (getEurusDeviceId(email)) {
+    // if (getEurusDeviceId(email)) {
         try {
-            console.log("tried")
             let loginWallet = generateWallet(email + loginPassword);
             const walletAddress = loginWallet.walletAddress
                 .substring(2)
@@ -131,9 +132,9 @@ export async function loginBySignature(email, loginPassword) {
             let response = await axios.post(url, request, {
                 headers: headers
             });
-            console.log("response", response)
             if (response && response.status === 200) {
                 if (response.data) {
+                    console.log(response.data)
                     let data = response.data;
                     result = data;
                 }
@@ -152,6 +153,6 @@ export async function loginBySignature(email, loginPassword) {
                 };
             }
         }
-    }
+    // }
     return result;
 }

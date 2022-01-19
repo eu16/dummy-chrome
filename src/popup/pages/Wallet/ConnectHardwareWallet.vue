@@ -10,7 +10,7 @@
         /> -->
         <img
           src="images/Eurus.svg"
-          alt="Harmony"
+          alt="Eurus"
           style="max-width: 130px; padding: 20px"
         />
       </div>
@@ -119,10 +119,6 @@ export default {
     },
     connect: async function () {
       try {
-        const { ethereum } = window;
-        console.log(ethereum)
-        // Will open the MetaMask UI
-        // You should disable this button while the request is pending!
         await window.ethereum.request({ method: "eth_requestAccounts" });
       } catch (error) {
         console.error(error);

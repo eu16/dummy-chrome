@@ -160,6 +160,7 @@ import {
   createAccountFromMnemonic,
 } from "services/AccountService";
 import { mapState } from "vuex";
+// import Web3 from 'web3';
 // import { setEmail } from "../../../services/utils/auth"
 // import { registerByEmail, setupPaymentWallet } from "../../../services/utils/api"
 
@@ -168,6 +169,7 @@ export default {
   data: () => ({
     name: "",
     password: "",
+    email: "",
     agree: false,
     password_confirm: "",
     seed_phrase: "",
@@ -177,7 +179,15 @@ export default {
   computed: {
     ...mapState(["wallets"]),
   },
+  mounted() {
+    // this.testWeb3();
+  },
   methods: {
+    // testWeb3: async function () {
+    //   console.log("here")
+    //   const web3 = new Web3("http://besudevrpc.eurus.network:80")
+    //   console.log(web3)
+    // },
     addAccount() {
       this.$store.commit("wallets/addAccount", {
         ...this.wallet,
