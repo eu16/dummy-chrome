@@ -8,7 +8,6 @@ export function isValidEmail(email) {
     }
 }
 
-
 export function isAlphaNum(text) {
     const checkPattern1 = /(?=.*[aA-zZ])/;
     const checkPattern2 = /(?=.*[0-9])/;

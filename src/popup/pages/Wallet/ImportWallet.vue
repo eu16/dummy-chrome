@@ -174,7 +174,7 @@ import {
   validateMnemonic,
 } from "services/AccountService";
 import { loginBySignature } from "../../../services/utils/api";
-// import { isValidEmail, isAlphaNum, checkTextLength } from "../../../services/utils";
+import { isValidEmail, isAlphaNum, checkTextLength } from "../../../services/utils";
 import { setEmail } from "../../../services/utils/auth";
 
 export default {
@@ -212,14 +212,14 @@ export default {
         }
       }
       if (this.selectType === "email") {
-        // if (!validateMnemonic(this.mnemonic)) {
-        //   this.$notify({
-        //     group: "notify",
-        //     type: "error",
-        //     text: "Please enter a valid mnemonic",
-        //   });
-        //   return false;
-        // }
+        if (!isValidEmail(this.email.toLowerCase())) {
+          this.$notify({
+            group: "notify",
+            type: "error",
+            text: "Please enter a valid email",
+          });
+          return false;
+        }
       }
       if (this.selectType === "keystore") {
         if (!this.file) {
