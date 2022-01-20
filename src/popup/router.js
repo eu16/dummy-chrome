@@ -3,7 +3,7 @@ import Router from "vue-router";
 import AuthRoute from "./AuthRoute.vue";
 import CreateWallet from "./pages/Wallet/CreateWallet.vue";
 import ImportWallet from "./pages/Wallet/ImportWallet.vue";
-import ConnectHardwareWallet from "./pages/Wallet/ConnectHardwareWallet.vue";
+import ConnectMetaMaskWallet from "./pages/Wallet/ConnectMetaMaskWallet.vue";
 import LogIn from "./pages/API/LogIn.vue";
 import SignTransaction from "./pages/API/SignTransaction.vue";
 import PersonalSign from "./pages/API/PersonalSign.vue";
@@ -203,9 +203,9 @@ const router = new Router({
       },
     },
     {
-      path: "/connect-hardware-wallet",
-      name: "connect-hardware-wallet",
-      component: ConnectHardwareWallet,
+      path: "/connect-metamask-wallet",
+      name: "connect-metamask-wallet",
+      component: ConnectMetaMaskWallet,
       meta: {
         authenticate: true,
       },
