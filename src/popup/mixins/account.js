@@ -22,11 +22,11 @@ export default {
       this.$store.commit("account/balance", balance);
     },
 
-    async refreshAccount() {
-      this.$store.commit("loading", true);
-      await this.loadShardingInfo();
-      await this.loadOneBalance();
-      this.$store.commit("loading", false);
-    },
+    // async refreshAccount() {
+    //   this.$store.commit("loading", true);
+    //   await this.loadShardingInfo();
+    //   await this.loadOneBalance();
+    //   this.$store.commit("loading", false);
+    // },
   },
 };

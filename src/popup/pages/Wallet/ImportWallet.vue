@@ -292,7 +292,7 @@ export default {
         });
         return false;
       }
-
+   
       if (this.selectType === "key") {
         const oneAddr = getAddressFromPrivateKey(this.privateKey);
 

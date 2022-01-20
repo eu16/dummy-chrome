@@ -3,11 +3,15 @@
     <app-header headerTab="create-tab" />
     <main class="main">
       <div class="main-logo" v-if="scene === 1 || scene === 4">
-        <img src="images/Eurus.svg" alt="Eurus" style="max-width:130px; padding:20px" />
+        <img
+          src="images/Eurus.svg"
+          alt="Eurus"
+          style="max-width: 130px; padding: 20px"
+        />
       </div>
       <div v-if="scene === 1">
-        <!-- <label class="input-label account-name">
-          Account Name
+        <label class="input-label">
+          {{ $t("common.email") }}
           <input
             class="input-field"
             type="text"
@@ -15,10 +19,9 @@
             ref="name"
             v-model="name"
             placeholder="Input the account name"
-            v-on:keyup.enter="createName"
           />
-        </label> -->
-        <label class="input-label">
+        </label>
+        <!-- <label class="input-label">
           {{ $t("common.email") }}
           <input
             class="input-field"
@@ -29,9 +32,9 @@
             :placeholder="$t('login.enter_email')"
             v-on:keyup.enter="createName"
           />
-        </label>
+        </label> -->
         <label class="input-label">
-          {{ $t("common.confirmloginpassword") }}
+          {{ $t("common.loginpassword") }}
           <input
             class="input-field"
             type="password"
@@ -42,7 +45,7 @@
           />
         </label>
         <label class="input-label">
-          {{ $t("common.loginpassword") }}
+          {{ $t("common.confirmloginpassword") }}
           <input
             class="input-field"
             type="password"
@@ -65,14 +68,13 @@
             @click="createName"
             class="primary"
             :class="!wallets.accounts.length ? 'flex' : ''"
-            :disabled="!email || !password || !password_confirm "
+            :disabled="!name || !password || !password_confirm"
           >
             {{ $t("common.create") }}
           </button>
         </div>
       </div>
       <div v-else-if="scene === 2">
-              
         <!-- <label class="input-label">
           Email
           <input
@@ -91,7 +93,7 @@
             type="password"
             name="password"
             ref="password"
-            v-model="password"
+            v-model="paymPassword"
             :placeholder="$t('register.enter_pp')"
           />
         </label>
@@ -102,7 +104,7 @@
             type="password"
             name="password_confirm"
             ref="password_confirm"
-            v-model="password_confirm"
+            v-model="paymPassword_confirm"
             :placeholder="$t('passwordType.confirm_new_payment_pw')"
           />
         </label>
@@ -121,7 +123,8 @@
         </label> -->
         <input type="checkbox" id="seedcheck" :value="agree" v-model="agree" />
         <label class="check-label" for="seedcheck"
-          >{{ $t("termsAndConditions.creation") }}  <a
+          >{{ $t("termsAndConditions.creation") }}
+          <a
             target="_blank"
             href="https://www.eurus.network/support/terms-of-use/"
             ><span>{{ $t("termsAndConditions.agreementTerms") }}.</span></a
@@ -132,7 +135,11 @@
         > -->
         <div class="button-group">
           <button class="outline" @click="() => (scene = 1)">Back</button>
-          <button class="primary" @click="confirmPassword" :disabled="!agree">
+          <button
+            class="primary"
+            @click="confirmPassword"
+            :disabled="!agree || !paymPassword || !paymPassword_confirm"
+          >
             Next
           </button>
         </div>
@@ -160,6 +167,11 @@ import {
   createAccountFromMnemonic,
 } from "services/AccountService";
 import { mapState } from "vuex";
+import {
+  isValidEmail,
+  isAlphaNum,
+  checkTextLength,
+} from "../../../services/utils";
 // import Web3 from 'web3';
 // import { setEmail } from "../../../services/utils/auth"
 // import { registerByEmail, setupPaymentWallet } from "../../../services/utils/api"
@@ -168,11 +180,13 @@ export default {
   mixins: [account],
   data: () => ({
     name: "",
-    password: "",
     email: "",
-    agree: false,
+    password: "",
+    paymPassword: "",
     password_confirm: "",
+    paymPassword_confirm: "",
     seed_phrase: "",
+    agree: false,
     scene: 1,
     wallet: null,
   }),
@@ -196,40 +210,89 @@ export default {
       alert(
         "Your account is created successfully. To continue, close this tab and use the extension."
       );
-      chrome.tabs.getCurrent(function(tab) {
-        chrome.tabs.remove(tab.id, function() {});
+      chrome.tabs.getCurrent(function (tab) {
+        chrome.tabs.remove(tab.id, function () {});
       });
     },
-    async confirmPassword() {
-      if (this.password.length < 8) {
+    createName() {
+      if (isValidEmail(this.name)) {
+        if (
+          isAlphaNum(this.password) ||
+          checkTextLength(this.password, 8, 20)
+        ) {
+          if (this.password === this.password_confirm) {
+            console.log("password is good to go");
+            this.seed_phrase = generatePhrase();
+            // this.scene = 2;
+            chrome.tabs.getCurrent(function (tab) {
+              chrome.tabs.remove(tab.id, function () {});
+            });
+            this.$route.push("/home")
+          } else {
+            this.$notify({
+              group: "notify",
+              type: "error",
+              text: "Passwords are not matching",
+            });
+          }
+        } else {
+          this.$notify({
+            group: "notify",
+            type: "error",
+            text: "Please make sure your password is between 8 to 20 characters and contains at least 1 alphabetical and 1 numerical charater",
+          });
+        }
+      } else {
         this.$notify({
           group: "notify",
           type: "warn",
-          text: "Password must be longer than 8 characters",
+          text: "Invalid email",
         });
-        return;
-      } else if (this.password !== this.password_confirm) {
+      }
+    },
+    async confirmPassword() {
+      if (
+        isAlphaNum(this.paymPassword) ||
+        checkTextLength(this.paymPassword, 8, 20)
+      ) {
+        if (this.paymPassword != this.password) {
+          if (this.paymPassword === this.paymPassword_confirm) {
+            console.log("payment password is good to go");
+            // this.wallet = await createAccountFromMnemonic(
+            //   this.name,
+            //   this.seed_phrase,
+            //   this.password
+            // );
+            // if (!this.wallet) {
+            //   this.$notify({
+            //     group: "notify",
+            //     type: "error",
+            //     text: "Password is incorrect or mnemonic is incorrect",
+            //   });
+            //   return;
+            // }
+            this.scene = 3;
+          } else {
+            this.$notify({
+              group: "notify",
+              type: "error",
+              text: "Passwords are not matching",
+            });
+          }
+        } else {
+          this.$notify({
+            group: "notify",
+            type: "error",
+            text: "Please select a different payment password to your login password",
+          });
+        }
+      } else {
         this.$notify({
           group: "notify",
           type: "error",
-          text: "Password doesn't match",
+          text: "Please make sure your payment password is between 8 to 20 characters and contains at least 1 alphabetical and 1 numerical charater",
         });
-        return;
       }
-      this.wallet = await createAccountFromMnemonic(
-        this.name,
-        this.seed_phrase,
-        this.password
-      );
-      if (!this.wallet) {
-        this.$notify({
-          group: "notify",
-          type: "error",
-          text: "Password is incorrect or mnemonic is incorrect",
-        });
-        return;
-      }
-      this.scene = 3;
     },
     copyToClipboard() {
       this.$copyText(this.seed_phrase).then(() => {
@@ -240,17 +303,7 @@ export default {
         });
       });
     },
-    createName() {
-      // if (this.name === "") {
-      //   this.$notify({
-      //     group: "notify",
-      //     text: "Invalid name",
-      //   });
-      //   return;
-      // }
-      this.seed_phrase = generatePhrase();
-      this.scene = 2;
-    },
+
     // createName: async function () {
     //   this.$store.dispatch("setAppIsLoading", true);
     //   try {
@@ -357,6 +410,12 @@ export default {
 </script>
 
 <style scoped>
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
 .button-group {
   margin-top: 30px;
   margin-bottom: 30px;

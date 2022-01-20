@@ -1,10 +1,13 @@
 <template>
   <div>
     <app-header
+      headerTab="main-tab"
+    />
+    <!-- <app-header
       @refresh="refreshAccount"
       @networkChanged="refreshAccount"
       headerTab="main-tab"
-    />
+    /> -->
     <main class="main">
       <div class="relative">
         <div class="main-logo">
@@ -166,6 +169,7 @@ export default {
       typeof this.account.shard !== "undefined" ||
       this.account.shard !== null
     ) {
+      console.log("this.account.shard", this.account.shard)
       this.shard = this.account.shard;
     } else {
       this.$store.commit("account/shard", 0);
