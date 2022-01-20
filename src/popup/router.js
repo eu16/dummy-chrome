@@ -257,11 +257,24 @@ const router = new Router({
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some((record) => record.meta.authenticate)) {
     if (store.getters.getLockState) {
-      next({ path: "/lock" });
+      next({
+        path: "/lock"
+      });
     }
   }
+
+// if (store.state.wallets.email === '') {
+  //   console.log("store.state.email", store.state.wallets.email)
+  //   chrome.tabs.create({
+  //     url: "popup.html#/create-wallet",
+  //   });
+  // } else {
+  //   console.log("store.state.email 2", store.state.wallets.email)
+  // }
+
+
   if (to.matched.some((record) => record.meta.requiredAccount)) {
-    if (!store.state.wallets.accounts.length) {
+    if (store.state.wallets.email === '') {
       chrome.tabs.create({
         url: "popup.html#/create-wallet",
       });

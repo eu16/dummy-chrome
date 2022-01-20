@@ -70,7 +70,7 @@ export default {
   },
 
   computed: mapState({
-    address: (state) => state.wallets.active.address,
+    address: (state) => state.wallets.address,
   }),
   methods: {
     copyToClipboard() {

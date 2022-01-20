@@ -7,7 +7,7 @@
       </router-link>
       <div class="header-lock">
         <a
-          v-if="wallets.accounts.length > 0"
+          v-if="wallets.address != ''"
           @click="lockWallet"
           v-tooltip.bottom="'Lock wallet'"
         >
@@ -123,43 +123,10 @@
         </a>
 
         <nav class="dropdown-menu" v-show="showDropdownMenu">
-          <div v-show="wallets.accounts.length > 0">
-            <span class="dropdown-menu-label">My Accounts</span>
+          <div v-show="wallets.address != ''">
+            <span class="dropdown-menu-label">My Account</span>
             <div class="dropdown-menu-divider"></div>
-            <div class="account-content" ref="accountcontent">
-              <div
-                class="dropdown-menu-item"
-                v-for="(account, index) in wallets.accounts"
-                :key="index"
-              >
-                <i
-                  class="material-icons"
-                  v-show="
-                    account.address === wallets.active.address &&
-                      ((selectedIndex = index) || 1)
-                  "
-                  >check</i
-                >
-                <div
-                  class="name-row"
-                  :class="
-                    account.address === wallets.active.address ? 'active' : ''
-                  "
-                >
-                  <a
-                    @click.prevent="
-                      () => {
-                        selectAccount(account.address);
-                      }
-                    "
-                    >{{ compressName(account.name) }}</a
-                  >
-                  <span v-if="account.isLedger" class="ledger-badge"
-                    >Ledger</span
-                  >
-                </div>
-              </div>
-            </div>
+            
           </div>
           <div class="dropdown-menu-divider"></div>
           <div class="dropdown-menu-item">
@@ -174,31 +141,31 @@
             <i class="material-icons">settings_input_component</i>
             <a @click.prevent="connectHardware">{{ $t("login.login_with_metamask") }}</a>
           </div>
-          <div v-if="wallets.accounts.length > 0 && !wallets.active.isLedger">
+          <!-- <div v-if="wallets.email != ''"> -->
             <div class="dropdown-menu-divider"></div>
             <div class="dropdown-menu-item">
               <i class="material-icons">save</i>
               <router-link to="/private-key">Export Private Key</router-link>
             </div>
-          </div>
+          <!-- </div> -->
           <div class="dropdown-menu-divider"></div>
-          <div v-if="wallets.accounts.length > 0">
+          <!-- <div v-if="wallets.address != ''"> -->
             <div class="dropdown-menu-item">
               <i class="material-icons">settings</i>
               <router-link to="/settings">{{ $t("common.settings") }}</router-link>
             </div>
-          </div>
+          <!-- </div> -->
           <div class="dropdown-menu-item">
             <i class="material-icons">info</i>
             <router-link to="/about">About Eurus</router-link>
           </div>
-          <div v-if="wallets.accounts.length > 0">
+          <!-- <div v-if="wallets.address != ''"> -->
             <div class="dropdown-menu-divider"></div>
             <div class="dropdown-menu-item">
               <i class="material-icons">lock</i>
               <a @click.prevent="lockWallet">Lock</a>
             </div>
-          </div>
+          <!-- </div> -->
         </nav>
       </div>
     </div>

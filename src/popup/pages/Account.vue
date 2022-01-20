@@ -17,11 +17,6 @@
             alt="Eurus"
           />
         </div>
-        <span
-          v-if="wallets.active.isLedger"
-          class="ledger-badge big account-badge"
-          >Ledger</span
-        >
       </div>
       <div class="container">
         <div class="account-container">
@@ -30,15 +25,10 @@
             @click="onClickAccount()"
             v-tooltip.top="'Click to copy'"
           >
-            <h2 class="name-label">{{ compressName(wallets.active.name) }}</h2>
-            <div class="name-ens" v-if="ensName">{{ ensName }}</div>
+            <h2 class="name-label">{{ wallets.email }}</h2>
             <div class="box-address">
               {{
-                compressAddress(
-                  displayMode ? switchToHexAddress(this.address) : this.address,
-                  20,
-                  5
-                )
+                wallets.address
               }}
             </div>
           </div>
@@ -214,8 +204,7 @@ export default {
       setTimeout(this.fetchTokenPrice, 30000);
     },
     onSendClick() {
-      if (this.wallets.active.isLedger) this.openExpandPopup("/send");
-      else this.$router.push("/send");
+      this.$router.push("/send");
     },
     onClickAccount() {
       this.$copyText(
@@ -289,8 +278,8 @@ export default {
   max-width: 200px;
 }
 .logo-img {
-  height: 50px;
-  width: 50px;
+  height: 100px;
+  width: 100px;
 }
 .account-badge {
   position: absolute;

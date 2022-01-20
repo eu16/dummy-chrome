@@ -14,7 +14,7 @@ Vue.use(Vuex);
 
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
-  modules: ["wallets", "network", "hrc20", "hrc721", "settings"],
+  modules: ["wallets", "assets", "account", "network", "hrc20", "hrc721", "settings"],
 });
 
 export default new Vuex.Store({

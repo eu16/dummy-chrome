@@ -70,7 +70,7 @@ export function setAccounttype(type) {
 
 export function getAccounttype() {
     // sessionStorage.getItem("walletype")
-    return store.state.wallet.walletype
+    return store.state.wallets.walletype
 }
 
 
@@ -79,7 +79,7 @@ export function setNetwork(type) {
 }
 
 export function getNetwork() {
-    return store.state.wallet.network
+    return store.state.wallets.network
 }
 
 export function setAddress(address) {
@@ -97,7 +97,7 @@ export function setAddress(address) {
 }
 
 export function getAddress() {
-    return store.state.wallet.address
+    return store.state.wallets.address
 }
 
 export function setEurusUserDepositAddress(eurusUserDepositAddress) {
@@ -255,7 +255,7 @@ export function setMainnetWalletAddress(address) {
 }
 
 export function getMainnetWalletAddress() {
-    return store.state.wallet.mainnetWalletAddress
+    return store.state.wallets.mainnetWalletAddress
 }
 
 export function setOwnerWalletAddress(address) {
@@ -263,7 +263,7 @@ export function setOwnerWalletAddress(address) {
 }
 
 export function getOwnerWalletAddress() {
-    return store.state.wallet.ownerWalletAddress
+    return store.state.wallets.ownerWalletAddress
 }
 
 export function setOwnerWalletMnemonic(mnemonic) {
@@ -271,7 +271,7 @@ export function setOwnerWalletMnemonic(mnemonic) {
 }
 
 export function getOwnerWalletMnemonic() {
-    return store.state.wallet.ownerWalletMnemonic
+    return store.state.wallets.ownerWalletMnemonic
 }
 
 export function setEmail(email) {
@@ -279,7 +279,7 @@ export function setEmail(email) {
 }
 
 export function getEmail() {
-    return store.state.wallet.email
+    return store.state.wallets.email
 }
 
 export function setUserId(userId) {
@@ -287,7 +287,7 @@ export function setUserId(userId) {
 }
 
 export function getUserId() {
-    return store.state.wallet.userId
+    return store.state.wallets.userId
 }
 
 export function addPendingMoveGasTx(pendingMoveGasTx) {

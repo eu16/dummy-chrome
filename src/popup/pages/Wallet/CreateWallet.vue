@@ -21,18 +21,6 @@
             placeholder="Input the account name"
           />
         </label>
-        <!-- <label class="input-label">
-          {{ $t("common.email") }}
-          <input
-            class="input-field"
-            type="email"
-            name="email"
-            ref="email"
-            v-model="email"
-            :placeholder="$t('login.enter_email')"
-            v-on:keyup.enter="createName"
-          />
-        </label> -->
         <label class="input-label">
           {{ $t("common.loginpassword") }}
           <input
@@ -75,17 +63,6 @@
         </div>
       </div>
       <div v-else-if="scene === 2">
-        <!-- <label class="input-label">
-          Email
-          <input
-            class="input-field"
-            type="email"
-            name="email"
-            ref="email"
-            v-model="email"
-            placeholder="Enter your email"
-          />
-        </label> -->
         <label class="input-label">
           {{ $t("passwordType.payment_pw") }}
           <input

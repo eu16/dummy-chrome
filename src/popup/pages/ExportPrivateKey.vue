@@ -119,8 +119,8 @@ export default {
 
   computed: {
     ...mapState({
-      accounts: (state) =>
-        state.wallets.accounts.filter((acc) => !acc.isLedger),
+      // accounts: (state) =>
+      //   state.wallets.accounts.filter((acc) => !acc.isLedger),
       active: (state) => state.wallets.active,
     }),
     getAddress() {

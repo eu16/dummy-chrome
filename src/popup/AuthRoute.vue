@@ -8,7 +8,7 @@ export default {
   computed: {
     ...mapGetters(["getPinCode"]),
     ...mapState({
-      accounts: (state) => state.wallets.accounts,
+      // accounts: (state) => state.wallets.accounts,
       timeout: (state) => state.settings.auth.timeout,
     }),
   },
@@ -16,7 +16,8 @@ export default {
     const { AppState } = await storage.getValue("AppState");
     if (AppState) {
       const { lastClosed } = AppState;
-      if (lastClosed && this.accounts.length && this.getPinCode) {
+      if (lastClosed && this.getPinCode) {
+      // if (lastClosed && this.accounts.length && this.getPinCode) {
         const now = Date.now();
         const offset = now - lastClosed;
         if (offset >= this.timeout) {
