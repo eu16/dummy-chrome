@@ -67,7 +67,14 @@ import { mapState } from "vuex";
 import _ from "lodash";
 import { loginBySignature } from "../../../services/utils/api";
 import { isValidEmail } from "../../../services/utils";
-import { setEmail, setAddress, getEmail } from "../../../services/utils/auth";
+import {
+  setAccounttype,
+  setAddress,
+  setToken,
+  setEmail,
+  setMainnetWalletAddress,
+  setOwnerWalletAddress,
+} from "../../../services/utils/auth";
 
 export default {
   data: () => ({
@@ -107,6 +114,14 @@ export default {
             this.scene = 2;
             setEmail(this.email.toLowerCase());
             setAddress(loginBySignatureResult.data.walletAddress);
+            setToken(loginBySignatureResult.data.token);
+            setAccounttype("centralized");
+            setMainnetWalletAddress(
+              loginBySignatureResult.data.mainnetWalletAddress
+            );
+            setOwnerWalletAddress(
+              loginBySignatureResult.data.ownerWalletAddress
+            );
             this.wallet = {
               name: this.email,
               address: loginBySignatureResult.data.walletAddress,
@@ -132,9 +147,7 @@ export default {
       }
     },
     addAcc() {
-      console.log(getEmail());
-      this.$store.commit("wallets/addAccount", this.wallet);
-      console.log("chrome", chrome);
+      // this.$store.commit("wallets/addAccount", this.wallet);
       alert(
         "Your account is imported successfully. To continue, close this tab and use the extension."
       );

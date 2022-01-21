@@ -25,6 +25,8 @@ import Settings from "./pages/Settings/index.vue";
 import Security from "./pages/Settings/Security/index.vue";
 import HelpCenter from "./pages/Settings/HelpCenter/index.vue";
 import PincodeModal from "./pages/Settings/Security/PincodeModal.vue";
+import PasswordModal from "./pages/Settings/Security/PasswordModal.vue";
+import PaymPasswordModal from "./pages/Settings/Security/PaymPasswordModal.vue";
 
 import store from "./store";
 
@@ -243,6 +245,30 @@ const router = new Router({
       path: "/settings/security/pincode",
       name: "pincode",
       component: PincodeModal,
+      props: {
+        method: "update",
+        subModule: false,
+      },
+      meta: {
+        requiredAccount: true,
+      },
+    },
+    {
+      path: "/settings/security/password",
+      name: "password",
+      component: PasswordModal,
+      props: {
+        method: "update",
+        subModule: false,
+      },
+      meta: {
+        requiredAccount: true,
+      },
+    },
+    {
+      path: "/settings/security/paymentpassword",
+      name: "paymentpassword",
+      component: PaymPasswordModal,
       props: {
         method: "update",
         subModule: false,

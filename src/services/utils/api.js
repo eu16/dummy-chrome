@@ -521,3 +521,176 @@ export async function faucetAsset(currencyCode) {
     };
     return axios.post(url, body, { headers: headers });
 }
+
+
+export async function changeLoginSignature(
+    email,
+    loginPassword,
+    newLoginPassword
+) {
+    let result = null;
+    if (getEurusDeviceId(email)) {
+        try {
+            let oldLoginWallet = generateWallet(email + loginPassword);
+            const oldWalletAddress = oldLoginWallet.walletAddress
+                .substring(2)
+                .toLowerCase();
+            const oldPublicKey = oldLoginWallet.publicKey.substring(2).toLowerCase();
+            const oldPrivateKey = oldLoginWallet.privateKey.toLowerCase();
+
+            // Generate new keys and addresses
+            let loginWallet = generateWallet(email + newLoginPassword);
+            const walletAddress = loginWallet.walletAddress
+                .substring(2)
+                .toLowerCase();
+            const publicKey = loginWallet.publicKey.substring(2).toLowerCase();
+            const privateKey = loginWallet.privateKey.toLowerCase();
+
+            const nonce = uuidv4();
+            const ts = Date.now();
+            const deviceId = getEurusDeviceId(email);
+
+            const message =
+                "deviceId=" +
+                deviceId +
+                "&timestamp=" +
+                ts +
+                "&walletAddress=" +
+                oldWalletAddress;
+            const messageHash = ethCrypto.hash.keccak256(message).substring(2);
+            const oldSignature = ethCrypto.sign(
+                oldPrivateKey, // privateKey
+                messageHash // hash of message
+            );
+            const oldSignature2 = oldSignature.substring(2, 130);
+
+            const message2 =
+                "deviceId=" +
+                deviceId +
+                "&timestamp=" +
+                ts +
+                "&walletAddress=" +
+                walletAddress;
+            const messageHash2 = ethCrypto.hash.keccak256(message2).substring(2);
+            const signature = ethCrypto.sign(privateKey, messageHash2);
+            const signature2 = signature.substring(2, 130);
+
+            var request = {
+                nonce: nonce,
+                timestamp: ts,
+                deviceId: deviceId,
+                oldLoginAddress: oldWalletAddress,
+                loginAddress: walletAddress,
+                sign: signature2,
+                oldSign: oldSignature2,
+                publicKey: publicKey,
+                oldPublicKey: oldPublicKey,
+            };
+
+            let url = eurusApiUrl + "/user/changeLoginPassword";
+            const headers = {
+                Authorization: "Bearer " + getToken(),
+                "Content-Type": "application/json",
+            };
+            let response = await axios.post(url, request, { headers: headers });
+            if (response && response.status === 200) {
+                result = response.data;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    return result;
+}
+
+export async function changePaymentSignature(
+    email,
+    encryptedMnemonicString,
+    oldPaymentPassword,
+    newPaymentPassword
+) {
+    let result = null;
+    if (getEurusPrivateKey() && getEurusDeviceId(email)) {
+        try {
+            let mnemonicString = decryptMnemonic(
+                encryptedMnemonicString,
+                getEurusPrivateKey()
+            );
+            let oldPaymentWallet = generateWallet(
+                email + oldPaymentPassword,
+                mnemonicString
+            );
+            const oldOwnerWalletAddress = oldPaymentWallet.walletAddress
+                .substring(2)
+                .toLowerCase();
+            const oldPublicKey = oldPaymentWallet.publicKey
+                .substring(2)
+                .toLowerCase();
+            const oldPrivateKey = oldPaymentWallet.privateKey.toLowerCase();
+
+            // Generate new keys and addresses
+            // Will it gen a new memorable 12 words on the server side?
+            let newPaymentWallet = generateWallet(
+                email + newPaymentPassword,
+                mnemonicString
+            );
+            const ownerWalletAddress = newPaymentWallet.walletAddress
+                .substring(2)
+                .toLowerCase();
+            const publicKey = newPaymentWallet.publicKey.substring(2).toLowerCase();
+            const privateKey = newPaymentWallet.privateKey.toLowerCase();
+
+            const nonce = uuidv4();
+            const ts = Date.now();
+            const deviceId = getEurusDeviceId(email);
+
+            const oldMessage =
+                "deviceId=" +
+                deviceId +
+                "&timestamp=" +
+                ts +
+                "&walletAddress=" +
+                oldOwnerWalletAddress;
+            const oldMessageHash = ethCrypto.hash.keccak256(oldMessage).substring(2);
+            const oldSignature = ethCrypto.sign(oldPrivateKey, oldMessageHash);
+            const oldSignature2 = oldSignature.substring(2, 130);
+
+            const message =
+                "deviceId=" +
+                deviceId +
+                "&timestamp=" +
+                ts +
+                "&walletAddress=" +
+                ownerWalletAddress;
+            const messageHash = ethCrypto.hash.keccak256(message).substring(2);
+            const signature = ethCrypto.sign(privateKey, messageHash);
+            const signature2 = signature.substring(2, 130);
+
+            var request = {
+                nonce: nonce,
+                oldOwnerWalletAddress: oldOwnerWalletAddress,
+                ownerWalletAddress: ownerWalletAddress,
+                timestamp: ts,
+                deviceId: deviceId,
+                sign: signature2,
+                oldSign: oldSignature2,
+                publicKey: publicKey,
+                oldPublicKey: oldPublicKey,
+            };
+
+            let url = eurusApiUrl + "/user/changePaymentPassword";
+            const headers = {
+                Authorization: "Bearer " + getToken(),
+                "Content-Type": "application/json",
+            };
+            let response = await axios.post(url, request, { headers: headers });
+            if (response && response.status === 200) {
+                result = response.data;
+                result.ownerWalletAddress = newPaymentWallet.walletAddress.toLowerCase();
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    return result;
+}

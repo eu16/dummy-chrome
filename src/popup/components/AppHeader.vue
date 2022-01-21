@@ -2,16 +2,22 @@
   <header class="header">
     <div class="header-top">
       <router-link class="header-logo" to="/home">
-        <img src="images/img_home_logo.png" alt="" style="max-width:100px"/>
+        <img src="images/img_home_logo.png" alt="" style="max-width: 100px" />
         <!-- <span>Harmony</span> -->
       </router-link>
-      <div class="header-lock">
+      <!-- <div class="header-lock">
         <a
           v-if="wallets.address != ''"
           @click="lockWallet"
           v-tooltip.bottom="'Lock wallet'"
         >
           <i class="material-icons">lock</i>
+        </a>
+      </div> -->
+
+      <div class="header-lock">
+        <a v-if="wallets.address != ''" @click="goHome()">
+          <i class="material-icons">home</i>
         </a>
       </div>
 
@@ -126,7 +132,6 @@
           <div v-show="wallets.address != ''">
             <span class="dropdown-menu-label">My Account</span>
             <div class="dropdown-menu-divider"></div>
-            
           </div>
           <div class="dropdown-menu-divider"></div>
           <div class="dropdown-menu-item">
@@ -135,36 +140,46 @@
           </div>
           <div class="dropdown-menu-item">
             <i class="material-icons">vertical_align_bottom</i>
-            <a @click.prevent="importAccount">{{ $t("login.import_wallet") }}</a>
+            <a @click.prevent="importAccount">{{
+              $t("login.import_wallet")
+            }}</a>
           </div>
           <div class="dropdown-menu-item">
             <i class="material-icons">settings_input_component</i>
-            <a @click.prevent="connectHardware">{{ $t("login.login_with_metamask") }}</a>
+            <a @click.prevent="connectHardware">{{
+              $t("login.login_with_metamask")
+            }}</a>
           </div>
           <!-- <div v-if="wallets.email != ''"> -->
-            <div class="dropdown-menu-divider"></div>
-            <div class="dropdown-menu-item">
-              <i class="material-icons">save</i>
-              <router-link to="/private-key">Export Private Key</router-link>
-            </div>
+          <div class="dropdown-menu-divider"></div>
+          <div class="dropdown-menu-item">
+            <i class="material-icons">save</i>
+            <router-link to="/private-key">Export Private Key</router-link>
+          </div>
           <!-- </div> -->
           <div class="dropdown-menu-divider"></div>
           <!-- <div v-if="wallets.address != ''"> -->
-            <div class="dropdown-menu-item">
-              <i class="material-icons">settings</i>
-              <router-link to="/settings">{{ $t("common.settings") }}</router-link>
-            </div>
+          <div class="dropdown-menu-item">
+            <i class="material-icons">settings</i>
+            <router-link to="/settings">{{
+              $t("common.settings")
+            }}</router-link>
+          </div>
           <!-- </div> -->
+          <div class="dropdown-menu-item">
+            <i class="material-icons">exit_to_app</i>
+            <a @click.prevent="logout">Logout</a>
+          </div>
+          <!-- <div v-if="wallets.address != ''"> -->
+          <div class="dropdown-menu-divider"></div>
           <div class="dropdown-menu-item">
             <i class="material-icons">info</i>
             <router-link to="/about">About Eurus</router-link>
           </div>
-          <!-- <div v-if="wallets.address != ''"> -->
-            <div class="dropdown-menu-divider"></div>
-            <div class="dropdown-menu-item">
-              <i class="material-icons">lock</i>
-              <a @click.prevent="lockWallet">Lock</a>
-            </div>
+          <div class="dropdown-menu-item">
+            <i class="material-icons">lock</i>
+            <a @click.prevent="lockWallet">Lock</a>
+          </div>
           <!-- </div> -->
         </nav>
       </div>
@@ -237,6 +252,9 @@ export default {
   },
 
   methods: {
+    goHome() {
+      this.$router.push({ path: "/" });
+    },
     compressName(str) {
       if (str.length > 15)
         return (
@@ -250,11 +268,11 @@ export default {
     },
     toggleDropdownMenu() {
       this.showDropdownMenu = this.showDropdownMenu ? false : true;
-      this.$nextTick(() => {
-        const offset =
-          this.$refs.accountcontent.scrollHeight / this.wallets.accounts.length;
-        this.$refs.accountcontent.scrollTop = this.selectedIndex * offset;
-      });
+      // this.$nextTick(() => {
+      //   const offset =
+      //     this.$refs.accountcontent.scrollHeight / this.wallets.accounts.length;
+      //   this.$refs.accountcontent.scrollTop = this.selectedIndex * offset;
+      // });
     },
 
     hideDropdownMenu() {
@@ -268,7 +286,6 @@ export default {
     hideNetworkDropdown() {
       this.showNetworkDropdown = false;
     },
-
     changeNetwork(network) {
       this.showNetworkDropdown = false;
       this.$store.commit("account/shard", 0);
@@ -282,6 +299,10 @@ export default {
       this.refreshData();
       if (this.$route.name !== "account") this.$router.push("/home");
     },
+    logout: function () {
+      clearAll();
+      this.$router.push("/create-wallet");
+    },
     createAccount() {
       this.openExpandPopup("/create-wallet");
     },
@@ -294,8 +315,7 @@ export default {
     lockWallet() {
       if (!this.getPinCode) {
         this.$modal.show("dialog", {
-          text:
-            "You haven't set the PIN Code yet. Please set the PIN Code on the <b>Settings</b>",
+          text: "You haven't set the PIN Code yet. Please set the PIN Code on the <b>Settings</b>",
           buttons: [
             {
               title: "CLOSE",

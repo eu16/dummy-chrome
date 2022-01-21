@@ -24,11 +24,11 @@ export default {
       options: [
         {
           title: "Change the Login Password",
-          handler: () => this.showPindigitsModal(),
+          handler: () => this.changePassword(),
         },
         {
           title: "Change the Payment Password",
-          handler: () => this.showLockTimerModal(),
+          handler: () => this.changePaymPassword(),
         },
         { title: "Change the PIN Code", handler: () => this.changePincode() },
         {
@@ -49,6 +49,12 @@ export default {
   methods: {
     changePincode() {
       this.$router.push("/settings/security/pincode");
+    },
+    changePassword() {
+      this.$router.push("/settings/security/password");
+    },
+    changePaymPassword() {
+      this.$router.push("/settings/security/paymentpassword");
     },
     showPindigitsModal() {
       this.$modal.show("modal-pindigits");

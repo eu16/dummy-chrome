@@ -1,8 +1,6 @@
 <template>
   <div>
-    <app-header
-      headerTab="main-tab"
-    />
+    <app-header headerTab="main-tab" />
     <!-- <app-header
       @refresh="refreshAccount"
       @networkChanged="refreshAccount"
@@ -27,9 +25,7 @@
           >
             <h2 class="name-label">{{ wallets.email }}</h2>
             <div class="box-address">
-              {{
-                wallets.address
-              }}
+              {{ wallets.address }}
             </div>
           </div>
           <div
@@ -53,17 +49,29 @@
 
         <div class="box-balance">
           12.039
-          <span class="box-balance-code">EUN</span><img src='tokenIcons/eun.svg' style="width:15px; margin-left:5px"/>
+          <span class="box-balance-code">EUN</span
+          ><img
+            src="tokenIcons/eun.svg"
+            style="width: 15px; margin-left: 5px"
+          />
         </div>
         <div class="divider"></div>
         <div class="box-balance">
           0.0229783
-          <span class="box-balance-code">ETH</span><img src='tokenIcons/eth.svg' style="width:15px; margin-left:5px"/>
+          <span class="box-balance-code">ETH</span
+          ><img
+            src="tokenIcons/eth.svg"
+            style="width: 15px; margin-left: 5px"
+          />
         </div>
         <div class="divider"></div>
         <div class="box-balance">
           10.0923
-          <span class="box-balance-code">USDT</span><img src='tokenIcons/usdt.svg' style="width:15px; margin-left:5px"/>
+          <span class="box-balance-code">USDT</span
+          ><img
+            src="tokenIcons/usdt.svg"
+            style="width: 15px; margin-left: 5px"
+          />
         </div>
         <!-- <div class="box-usd-balance">
           <span v-if="!tokenPrice">---</span>
@@ -124,6 +132,8 @@ import { mapState } from "vuex";
 import BigNumber from "bignumber.js";
 import { setupENS } from "services/utils/ens";
 import { oneToHexAddress } from "services/Hrc20Service";
+import { getAddress } from "../../../src/services/utils/auth"
+import { assets } from "./../../popup/store/modules/assets"
 import axios from "axios";
 
 export default {
@@ -153,24 +163,15 @@ export default {
         .toFixed();
     },
   },
-
   async mounted() {
-    if (
-      typeof this.account.shard !== "undefined" ||
-      this.account.shard !== null
-    ) {
-      console.log("this.account.shard", this.account.shard)
-      this.shard = this.account.shard;
-    } else {
-      this.$store.commit("account/shard", 0);
-      this.shard = 0;
-    }
     this.loadShardingInfo();
     this.loadOneBalance();
     this.fetchTokenPrice();
-    await this.loadEns();
+    // this.$nextTick(() => {
+    //   this.initList();
+    // });
+    // await this.loadEns();
   },
-
   watch: {
     shard(newValue, oldValue) {
       this.$store.commit("account/shard", newValue);
@@ -180,7 +181,6 @@ export default {
       await this.loadEns();
     },
   },
-
   methods: {
     switchAddress() {
       this.$store.commit("settings/setDisplayMode", 1 - this.displayMode);
@@ -203,6 +203,22 @@ export default {
       this.tokenPrice = { btc: btcUSD, eth: ethUSD, one: hmyUSD };
       setTimeout(this.fetchTokenPrice, 30000);
     },
+    // initList() {
+    //   // await this.getAccountAddress() {
+    //     let assetList = [];
+    //     assets.map((item, i) => {
+    //       assetList.push({
+    //         currencyCode: item,
+    //         enable: true,
+    //         sorting: i,
+    //       });
+    //     });
+    //   // };
+    // },
+    // getAccountAddress() {
+    //   this.accountAddress = getAddress()
+    //   console.log(this.accountAddress)
+    // },
     onSendClick() {
       this.$router.push("/send");
     },

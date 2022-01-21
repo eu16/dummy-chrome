@@ -194,7 +194,7 @@ export default {
     createName() {
       if (isValidEmail(this.name)) {
         if (
-          isAlphaNum(this.password) ||
+          isAlphaNum(this.password) &&
           checkTextLength(this.password, 8, 20)
         ) {
           if (this.password === this.password_confirm) {
