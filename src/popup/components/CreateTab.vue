@@ -4,9 +4,9 @@
     <router-link :class="{ active: myroute.name == 'import-wallet' }" to="/import-wallet">{{ $t("login.login_with_central") }}</router-link>
     <router-link
       :class="{
-        active: myroute.name == 'connect-hardware-wallet',
+        active: myroute.name == 'connect-metamask-wallet',
       }"
-      to="/connect-hardware-wallet"
+      to="/connect-metamask-wallet"
     >{{ $t("login.login_with_metamask") }}</router-link>
   </nav>
 </template>

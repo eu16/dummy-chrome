@@ -1,4 +1,5 @@
 import store from "/src/popup/store"
+import VueCookies from 'vue-cookies'
 
 const EurusDeviceObjects = 'EurusDeviceObjects'
 const deviceObjectsAesKey = process.env.VUE_APP_DEVICE_OBJECT_AES_KEY

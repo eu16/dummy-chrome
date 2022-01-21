@@ -310,7 +310,7 @@ export default {
       this.openExpandPopup("/import-wallet");
     },
     connectHardware() {
-      this.openExpandPopup("/connect-hardware-wallet");
+      this.openExpandPopup("/connect-metamask-wallet");
     },
     lockWallet() {
       if (!this.getPinCode) {

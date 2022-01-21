@@ -27,7 +27,6 @@
         </div> -->
         <div class="button-group">
           <button
-            v-show="wallets.accounts.length > 0"
             class="outline"
             @click="$router.push('/home')"
           >

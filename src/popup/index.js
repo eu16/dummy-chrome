@@ -7,6 +7,7 @@ import { sync } from "vuex-router-sync";
 import vClickOutside from "v-click-outside";
 import VueClipboard from "vue-clipboard2";
 import VModal from "vue-js-modal";
+import VueCookies from 'vue-cookies'
 import Notifications from "vue-notification";
 import AppHeader from "./components/AppHeader.vue";
 import SeedChecker from "./components/SeedChecker";
@@ -59,6 +60,7 @@ Vue.component("PincodeModal", PincodeModal);
 Vue.use(Notifications);
 Vue.use(vClickOutside);
 Vue.use(VueClipboard);
+Vue.use(VueCookies);
 Vue.use(Tooltip, {
   delay: 1,
 });

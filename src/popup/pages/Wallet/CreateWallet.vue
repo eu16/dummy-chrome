@@ -2,7 +2,8 @@
   <div>
     <app-header headerTab="create-tab" />
     <main class="main">
-      <div class="main-logo" v-if="scene === 1 || scene === 4">
+      <!-- <div class="main-logo" v-if="scene === 1 || scene === 4"> -->
+      <div class="main-logo" v-if="scene === 1 || scene === 2 || scene === 3">
         <img
           src="images/Eurus.svg"
           alt="Eurus"
@@ -121,11 +122,38 @@
           </button>
         </div>
       </div>
-      <div v-else-if="scene === 3">
-        <seed-checker :phrase="seed_phrase" :confirm="() => (scene = 4)" />
+      <div style="text-align: center" v-else-if="scene === 3">
+        <div class="pin-label">{{ $t("sentences.verification_code") }}</div>
+        <p style="font-size:0.7rem">
+          {{ $t("sentences.verificationSentTo") }} {{ name }}
+        </p>
+        <div class="pin-container">
+          <!-- <div
+          class="pin-container"
+          :class="{ 'pin-fail': pinfail }"
+          :style="{
+            'margin-left': getPinMargin(getPinCode.digits),
+            'margin-right': getPinMargin(getPinCode.digits),
+          }"
+        > -->
+          <PincodeInput
+            v-model="verificationCode"
+            :length="6"
+            :secure="true"
+            :characterPreview="true"
+            ref="verificationCode"
+          />
+        </div>
+        <div class="pin-caption">
+          <!-- <div class="pin-caption" :class="{ 'failed-caption': errorcode === 1 }"> -->
+          {{ statusCaption }}
+        </div>
+      </div>
+      <div v-else-if="scene === 4">
+        <seed-checker :phrase="seed_phrase" :confirm="() => (scene = 5)" />
       </div>
       <div v-else>
-        <pincode-modal @success="addAccount" :onBack="() => (scene = 3)" />
+        <pincode-modal @success="addAccount" :onBack="() => (scene = 4)" />
       </div>
       <notifications
         group="notify"
@@ -149,8 +177,7 @@ import {
   isAlphaNum,
   checkTextLength,
 } from "../../../services/utils";
-// import Web3 from 'web3';
-// import { setEmail } from "../../../services/utils/auth"
+import { setLocale, getLocale } from "../../../services/utils/auth";
 // import { registerByEmail, setupPaymentWallet } from "../../../services/utils/api"
 
 export default {
@@ -173,11 +200,18 @@ export default {
   mounted() {
     // this.testWeb3();
   },
+  created: function () {
+    if (!getLocale()) {
+      if (this.$i18n.locale) {
+        setLocale(this.$i18n.locale);
+      } else {
+        setLocale("en");
+      }
+    }
+  },
   methods: {
     // testWeb3: async function () {
-    //   console.log("here")
-    //   const web3 = new Web3("http://besudevrpc.eurus.network:80")
-    //   console.log(web3)
+    //   const web3 = new Web3(window.ethereum)
     // },
     addAccount() {
       this.$store.commit("wallets/addAccount", {
@@ -200,11 +234,8 @@ export default {
           if (this.password === this.password_confirm) {
             console.log("password is good to go");
             this.seed_phrase = generatePhrase();
-            // this.scene = 2;
-            chrome.tabs.getCurrent(function (tab) {
-              chrome.tabs.remove(tab.id, function () {});
-            });
-            this.$route.push("/home")
+            console.log("this.scene is 2");
+            this.scene = 2;
           } else {
             this.$notify({
               group: "notify",
