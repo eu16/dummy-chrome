@@ -14,7 +14,7 @@ export default {
 
     mutations: {
         ASSETS_RESET_STATE(state) {
-            Object.assign(state, getDefaultState())
+            Object.assign(state)
         },
         MAINNET: (state, data) => {
             state.mainnet = data;

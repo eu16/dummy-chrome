@@ -6,7 +6,10 @@ import {
 } from "./network"
 import {
     createEurusDeviceObject,
-    getEurusDeviceId
+    getEurusDeviceId,
+    getEurusPublicKey,
+    getToken,
+    getEurusPrivateKey,
 } from "./auth"
 import { generateWallet } from './web3';
 import { uuidv4 } from './index'
@@ -16,10 +19,12 @@ const eurusApiUrl = "http://besudevapi.eurus.network:80";
 
 
 export async function registerByEmail(email, loginPassword) {
+    console.log("register by email api", email, loginPassword)
     let result = null;
-    createEurusDeviceObject(email);
-    if (getEurusDeviceId(email)) {
+    // createEurusDeviceObject(email);
+    // if (getEurusDeviceId(email)) {
         try {
+            console.log("trying register by email api")
             let loginWallet = generateWallet(email + loginPassword);
             const walletAddress = loginWallet.walletAddress
                 .substring(2)
@@ -81,7 +86,7 @@ export async function registerByEmail(email, loginPassword) {
                 };
             }
         }
-    }
+    // }
     return result;
 }
 
@@ -156,6 +161,80 @@ export async function loginBySignature(email, loginPassword) {
     return result;
 }
 
+export async function setupPaymentWallet(
+    token,
+    email,
+    paymentPassword,
+    userId,
+    encryptedMnemonicString,
+    rsaPrivateKey
+) {
+    console.log("token", token, "email", email, "paymentPassword", paymentPassword)
+    console.log("userId", userId, "encryptedMnemonicString", encryptedMnemonicString, "rsaPrivateKey", rsaPrivateKey)
+    let result = null;
+    if (getEurusDeviceId(email)) {
+        try {
+            let mnemonicString = decryptMnemonic(
+                encryptedMnemonicString,
+                rsaPrivateKey
+            );
+            let paymentWallet = generateWallet(
+                email + paymentPassword,
+                mnemonicString
+            );
+            const walletAddress = paymentWallet.walletAddress
+                .substring(2)
+                .toLowerCase();
+            const publicKey = paymentWallet.publicKey.substring(2).toLowerCase();
+            const privateKey = paymentWallet.privateKey.toLowerCase();
+
+            const nonce = uuidv4();
+            const ts = Date.now();
+            const deviceId = getEurusDeviceId(email);
+            const message =
+                "deviceId=" +
+                deviceId +
+                "&timestamp=" +
+                ts +
+                "&walletAddress=" +
+                walletAddress;
+            const messageHash = ethCrypto.hash.keccak256(message).substring(2);
+
+            const signature = ethCrypto.sign(
+                privateKey, // privateKey
+                messageHash // hash of message
+            );
+            const signature2 = signature.substring(2, 130);
+            var request = {
+                nonce: nonce,
+                timestamp: ts,
+                deviceId: deviceId,
+                userId: userId,
+                address: walletAddress,
+                sign: signature2,
+                publicKey: publicKey,
+            };
+
+            let url = eurusApiUrl + "/user/setupPaymentWallet";
+            const headers = {
+                Authorization: "Bearer " + token,
+                "Content-Type": "application/json",
+            };
+            let response = await axios.post(url, request, { headers: headers });
+            if (response && response.status === 200) {
+                if (response.data) {
+                    let data = response.data;
+                    result = data;
+                    result.paymentWallet = paymentWallet;
+                }
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    return result;
+}
+
 export async function forgotLoginPassword(email) {
     let result = null;
     try {
@@ -193,7 +272,7 @@ export async function verification(email, code, publicKey) {
                 deviceId: deviceId,
                 publicKey: publicKey,
             };
-
+            console.log("request", request)
             let url = eurusApiUrl + "/user/verification";
             const headers = {
                 "Content-Type": "application/json",

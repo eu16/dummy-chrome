@@ -1,6 +1,10 @@
 import store from "/src/popup/store"
 import VueCookies from 'vue-cookies'
+import cryptoJS from 'crypto-js';
 
+const Locale = 'locale'
+const Tokenkey = 'token'
+const TokenTimestampKey = 'tokenTimestamp'
 const EurusDeviceObjects = 'EurusDeviceObjects'
 const deviceObjectsAesKey = process.env.VUE_APP_DEVICE_OBJECT_AES_KEY
 
@@ -64,7 +68,7 @@ export function setLocale(locale) {
 }
 
 export function setAccounttype(type) {
-    checkScheme()
+    // checkScheme()
         // sessionStorage.setItem("walletype", type)
     return store.dispatch('walletType', type)
 }
@@ -300,7 +304,7 @@ export function getPendingMoveGasTx() {
     // return store.state.wallet.userId
 }
 
-export function clearSessionStorage() {
+export function clearLocalStorage() {
     store.dispatch('assetsResetState')
     store.dispatch('globalResetState')
     store.dispatch('txnResetState')
@@ -310,10 +314,10 @@ export function clearSessionStorage() {
 export function clearAll() {
 
     // removeEurusObject();
-    clearSessionStorage();
+    clearLocalStorage();
     clearToken();
     setAccounttype("centralized");
-    checkScheme()
+    // checkScheme()
 }
 
 export function createEurusDeviceObject(email = "") {
@@ -439,3 +443,5 @@ function setEurusAllObjects(eurusObject) {
         localStorage.setItem(EurusDeviceObjects, eurusObjectStr);
     }
 }
+
+

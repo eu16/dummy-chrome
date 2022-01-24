@@ -6,6 +6,8 @@ import network from "./modules/network";
 import hrc20 from "./modules/hrc20";
 import hrc721 from "./modules/hrc721";
 import account from "./modules/account";
+import transactions from "./modules/transactions";
+import global from "./modules/global";
 import settings from "./modules/settings";
 import assets from "./modules/assets";
 import * as getters from "./getters";
@@ -20,6 +22,8 @@ const vuexLocal = new VuexPersistence({
 export default new Vuex.Store({
   getters,
   modules: {
+    transactions,
+    global,
     assets,
     wallets,
     network,

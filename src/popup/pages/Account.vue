@@ -177,9 +177,9 @@ export default {
       this.$store.commit("account/shard", newValue);
       this.loadOneBalance();
     },
-    async address() {
-      await this.loadEns();
-    },
+    // async address() {
+    //   await this.loadEns();
+    // },
   },
   methods: {
     switchAddress() {

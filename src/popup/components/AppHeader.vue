@@ -129,10 +129,10 @@
         </a>
 
         <nav class="dropdown-menu" v-show="showDropdownMenu">
-          <div v-show="wallets.address != ''">
+          <!-- <div v-show="wallets.address != ''">
             <span class="dropdown-menu-label">My Account</span>
             <div class="dropdown-menu-divider"></div>
-          </div>
+          </div> -->
           <div class="dropdown-menu-divider"></div>
           <div class="dropdown-menu-item">
             <i class="material-icons">add</i>
@@ -213,6 +213,8 @@ import Config from "~/config";
 import MainTab from "./MainTab";
 import CreateTab from "./CreateTab";
 import helper from "mixins/helper";
+import { clearAll } from "../../services/utils/auth";
+
 export default {
   mixins: [helper],
   props: {

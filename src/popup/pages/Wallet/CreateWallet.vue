@@ -10,6 +10,7 @@
           style="max-width: 130px; padding: 20px"
         />
       </div>
+      <!-- <h3 style="text-align:center; font-size:0.8rem">{{ $t("register.create_an_account") }}</h3> -->
       <div v-if="scene === 1">
         <label class="input-label">
           {{ $t("common.email") }}
@@ -19,7 +20,7 @@
             name="name"
             ref="name"
             v-model="name"
-            placeholder="Input the account name"
+            :placeholder="$t('login.enter_email')"
           />
         </label>
         <label class="input-label">
@@ -112,19 +113,21 @@
           >I understand that lost seeds cannot be recovered.</label
         > -->
         <div class="button-group">
-          <button class="outline" @click="() => (scene = 1)">Back</button>
+          <button class="outline" @click="() => (scene = 1)">
+            {{ $t("common.back") }}
+          </button>
           <button
             class="primary"
             @click="confirmPassword"
             :disabled="!agree || !paymPassword || !paymPassword_confirm"
           >
-            Next
+            {{ $t("common.next") }}
           </button>
         </div>
       </div>
       <div style="text-align: center" v-else-if="scene === 3">
         <div class="pin-label">{{ $t("sentences.verification_code") }}</div>
-        <p style="font-size:0.7rem">
+        <p style="font-size: 0.7rem">
           {{ $t("sentences.verificationSentTo") }} {{ name }}
         </p>
         <div class="pin-container">
@@ -137,16 +140,11 @@
           }"
         > -->
           <PincodeInput
-            v-model="verificationCode"
-            :length="6"
-            :secure="true"
-            :characterPreview="true"
-            ref="verificationCode"
+            :length="digit"
+            :characterPreview="false"
+            ref="smscode"
+            v-model="smscode"
           />
-        </div>
-        <div class="pin-caption">
-          <!-- <div class="pin-caption" :class="{ 'failed-caption': errorcode === 1 }"> -->
-          {{ statusCaption }}
         </div>
       </div>
       <div v-else-if="scene === 4">
@@ -177,38 +175,60 @@ import {
   isAlphaNum,
   checkTextLength,
 } from "../../../services/utils";
-import { setLocale, getLocale } from "../../../services/utils/auth";
-// import { registerByEmail, setupPaymentWallet } from "../../../services/utils/api"
+import {
+  setLocale,
+  getLocale,
+  setEmail,
+  getEurusPublicKey,
+  getEurusPrivateKey,
+} from "../../../services/utils/auth";
+import {
+  verification,
+  registerByEmail,
+  setupPaymentWallet,
+} from "../../../services/utils/api";
 
 export default {
   mixins: [account],
-  data: () => ({
-    name: "",
-    email: "",
-    password: "",
-    paymPassword: "",
-    password_confirm: "",
-    paymPassword_confirm: "",
-    seed_phrase: "",
-    agree: false,
-    scene: 1,
-    wallet: null,
-  }),
+  data() {
+    return {
+      digit: 6,
+      sms: [],
+      name: "",
+      userId: "",
+      smscode: "",
+      password: "",
+      paymPassword: "",
+      password_confirm: "",
+      paymPassword_confirm: "",
+      seed_phrase: "",
+      agree: false,
+      scene: 1,
+      wallet: null,
+    };
+  },
   computed: {
     ...mapState(["wallets"]),
   },
   mounted() {
     // this.testWeb3();
   },
-  created: function () {
-    if (!getLocale()) {
-      if (this.$i18n.locale) {
-        setLocale(this.$i18n.locale);
-      } else {
-        setLocale("en");
+  watch: {
+    smscode() {
+      if (this.smscode.length === this.digit) {
+        this.verifySmsCode();
       }
     }
   },
+  // created: function () {
+  //   if (!getLocale()) {
+  //     if (this.$i18n.locale) {
+  //       setLocale(this.$i18n.locale);
+  //     } else {
+  //       setLocale("en");
+  //     }
+  //   }
+  // },
   methods: {
     // testWeb3: async function () {
     //   const web3 = new Web3(window.ethereum)
@@ -266,20 +286,7 @@ export default {
         if (this.paymPassword != this.password) {
           if (this.paymPassword === this.paymPassword_confirm) {
             console.log("payment password is good to go");
-            // this.wallet = await createAccountFromMnemonic(
-            //   this.name,
-            //   this.seed_phrase,
-            //   this.password
-            // );
-            // if (!this.wallet) {
-            //   this.$notify({
-            //     group: "notify",
-            //     type: "error",
-            //     text: "Password is incorrect or mnemonic is incorrect",
-            //   });
-            //   return;
-            // }
-            this.scene = 3;
+            this.registerAccountByEmail();
           } else {
             this.$notify({
               group: "notify",
@@ -302,6 +309,112 @@ export default {
         });
       }
     },
+    // nextField: function (n) {
+    //   if (n.length< this.digit) {
+    //     this.$nextTick(() => {
+    //       if (this.$refs.smscode[n.length - 1].value != "") {
+    //         this.$refs.smscode[n].focus();
+    //       }
+    //     });
+    //   } else if (this.smscode.length === this.digit - 1) {
+    //     this.$nextTick(() => {
+    //       this.verify();
+    //     });
+    //   }
+    // },
+    registerAccountByEmail: async function () {
+      console.log("register by email")
+      try {
+        let registerByEmailResult = await registerByEmail(
+          this.name,
+          this.password
+        );
+        if (
+          registerByEmailResult &&
+          registerByEmailResult.returnCode === 0 &&
+          registerByEmailResult.data &&
+          registerByEmailResult.data.userId
+        ) {
+          if (registerByEmailResult.data.code) {
+            console.log("dataCode", registerByEmailResult.data.code);
+            setEmail(this.name);
+            alert(registerByEmailResult.data.code);
+            this.scene = 3;
+          } else {
+            this.$notify({
+              group: "notify",
+              type: "error",
+              text: "Register via email server error",
+            });
+          }
+        } else {
+          this.$notify({
+            group: "notify",
+            type: "error",
+            text: "Cannot register via email",
+          });
+        }
+      } catch (error) {}
+    },
+    verifySmsCode: async function () {
+      if (this.name && this.smscode && this.paymPassword) {
+        console.log("getEurusPublicKey", getEurusPublicKey())
+        console.log("getEurusPublicKey", getEurusPrivateKey())
+        try {
+          let verificationResult = await verification(
+            this.name,
+            this.smscode,
+            getEurusPublicKey()
+          );
+          console.log(verificationResult)
+          if (
+            verificationResult &&
+            verificationResult.returnCode === 0 &&
+            verificationResult.data &&
+            verificationResult.data.userId &&
+            verificationResult.data.email &&
+            verificationResult.data.mnemonic &&
+            verificationResult.data.token &&
+            getEurusPrivateKey()
+          ) {
+            await this.setupPaymentWallet(
+              verificationResult,
+              getEurusPrivateKey()
+            );
+            this.$router.push({ path: "/" });
+            console.log(
+              "verificationResult",
+              verificationResult,
+              "getEurusPrivateKey()",
+              getEurusPrivateKey()
+            );
+          } else {
+            if (verificationResult && verificationResult.returnCode === -1) {
+              this.$message("Invalid Verification Code", "warning");
+            } else if (
+              verificationResult &&
+              verificationResult.returnCode === -9
+            ) {
+              this.$notify({
+                group: "notify",
+                type: "error",
+                text: "Code Expired",
+              });
+            } else {
+              this.$notify({
+                group: "notify",
+                type: "error",
+                text: "Internal Error",
+              });
+            }
+            // this.$refs.smscode[0].focus();
+            // this.sms = [];
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    },
     copyToClipboard() {
       this.$copyText(this.seed_phrase).then(() => {
         this.$notify({
@@ -311,108 +424,6 @@ export default {
         });
       });
     },
-
-    // createName: async function () {
-    //   this.$store.dispatch("setAppIsLoading", true);
-    //   try {
-    //     let registerByEmailResult = await registerByEmail(
-    //       this.email.toLowerCase(),
-    //       this.password
-    //     );
-    //     if (
-    //       registerByEmailResult &&
-    //       registerByEmailResult.returnCode === 0 &&
-    //       registerByEmailResult.data &&
-    //       registerByEmailResult.data.userId
-    //     ) {
-    //       if (registerByEmailResult.data.code) {
-    //         alert(registerByEmailResult.data.code);
-    //       }
-    //       setEmail(this.form.email.toLowerCase());
-    //       this.$router.push({
-    //         name: "verify",
-    //         params: {
-    //           inputEmail: this.form.email.toLowerCase(),
-    //           inputPaymentPassword: this.form.pppassword,
-    //           inputUserId: registerByEmailResult.data.userId,
-    //           verificationType: constants.verificationType.REGISTER,
-    //         },
-    //       });
-    //     } else if (
-    //       registerByEmailResult &&
-    //       registerByEmailResult.returnCode === -20
-    //     ) {
-    //       this.$message("Email Already Register", "warning");
-    //     } else if (
-    //       registerByEmailResult &&
-    //       registerByEmailResult.isServerMaintenance
-    //     ) {
-    //       this.$message(this.$i18n.t("common.server_maintenance"), "warning");
-    //     } else {
-    //       this.$message("Error", "warning");
-    //     }
-    //     this.$store.dispatch("setAppIsLoading", false);
-    //   } catch (err) {
-    //     console.error(err);
-    //     this.$store.dispatch("setAppIsLoading", false);
-    //     this.$message(this.$i18n.t("common.network_error"), "warning");
-    //   } finally {
-    //     this.$store.dispatch("setAppIsLoading", false);
-    //   }
-    // },
-    // setupPaymentWallet: async function (verificationResult, rsaPrivateKey) {
-    //   let token = verificationResult.data.token;
-    //   let email = verificationResult.data.email;
-    //   let paymentPassword = this.paymentPassword;
-    //   let userId = verificationResult.data.userId;
-    //   let encryptedMnemonicString = verificationResult.data.mnemonic;
-    //   let setupPaymentWalletResult = await setupPaymentWallet(
-    //     token,
-    //     email,
-    //     paymentPassword,
-    //     userId,
-    //     encryptedMnemonicString,
-    //     rsaPrivateKey
-    //   );
-    //   if (
-    //     setupPaymentWalletResult &&
-    //     setupPaymentWalletResult.returnCode === 0 &&
-    //     setupPaymentWalletResult.data.token &&
-    //     setupPaymentWalletResult.data.walletAddress &&
-    //     setupPaymentWalletResult.data.mainnetWalletAddress
-    //   ) {
-    //     setToken(setupPaymentWalletResult.data.token);
-    //     setAddress(setupPaymentWalletResult.data.walletAddress);
-    //     setEmail(email);
-    //     setAccounttype("centralized");
-    //     setMainnetWalletAddress(
-    //       setupPaymentWalletResult.data.mainnetWalletAddress
-    //     );
-
-    //     setOwnerWalletAddress(
-    //       setupPaymentWalletResult.paymentWallet.walletAddress
-    //     );
-    //     setOwnerWalletMnemonic(encryptedMnemonicString);
-
-    //     this.$store.dispatch("setAppIsLoading", false);
-    //     this.$router.push("/dashboard");
-    //     try {
-    //       firebase.analytics().logEvent("login", { method: "decentralized" });
-    //     } catch (e) {
-    //       console.error(e);
-    //     }
-    //   } else {
-    //     if (
-    //       setupPaymentWalletResult &&
-    //       setupPaymentWalletResult.returnCode === -5
-    //     ) {
-    //       this.$message("Server Busy", "warning");
-    //     } else {
-    //       this.$message("Error", "warning");
-    //     }
-    //     this.$router.back();
-    //   }
-    // },
   },
 };
 </script>

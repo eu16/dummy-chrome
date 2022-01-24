@@ -88,7 +88,8 @@ export default {
         rewards: "奖励页面",
         version: "版本",
         refuel: "Refuel",
-        create: "Create"
+        create: "Create",
+        back: "Back"
     },
     dashboard: {
         edit_list: "编辑资产",

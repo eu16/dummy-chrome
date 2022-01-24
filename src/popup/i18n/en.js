@@ -88,7 +88,8 @@ export default {
         rewards: "Rewards",
         version: "Version",
         refuel: "Refuel",
-        create: "Create"
+        create: "Create",
+        back: "Back"
     },
     dashboard: {
         edit_list: "Edit list",

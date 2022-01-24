@@ -6,7 +6,8 @@ export default {
   mixins: [token],
   computed: mapState({
     account: (state) => state.account,
-    address: (state) => state.wallets.active.address,
+    address: (state) => state.wallets.address,
+    // address: (state) => state.wallets.active.address,
   }),
 
   methods: {

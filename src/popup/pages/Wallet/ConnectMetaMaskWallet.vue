@@ -15,7 +15,9 @@
         />
       </div>
       <div v-if="scene === 1">
-        <h3>{{ $t("login.login_with_metamask") }}</h3>
+        <h3 style="text-align: center; font-size: 1.5rem">
+          {{ $t("login.login_with_metamask") }}
+        </h3>
         <span class="form-label"
           >If you already have an account with Metamask you can connect your
           wallet directly via Metamask</span
@@ -26,10 +28,7 @@
           </button>
         </div> -->
         <div class="button-group">
-          <button
-            class="outline"
-            @click="$router.push('/home')"
-          >
+          <button class="outline" @click="$router.push('/home')">
             {{ $t("common.cancel") }}
           </button>
           <button
@@ -80,6 +79,7 @@
 
 <script>
 import { mapState } from "vuex";
+import detectEthereumProvider from "@metamask/detect-provider";
 // import { connectLedgerApp } from "services/LedgerService";
 // import { importWallet, getAccount } from "../../../services/utils/web3.js";
 
@@ -96,9 +96,26 @@ export default {
   computed: {
     ...mapState(["wallets"]),
   },
+  mounted() {
+    this.connectMetamask();
+  },
   methods: {
     nextToPincode() {
       this.scene = 3;
+    },
+    connectMetamask: async function () {
+      const provider = await detectEthereumProvider();
+
+      if (provider) {
+        console.log("Ethereum successfully detected!");
+
+        console.log(provider)
+        // const chainId = await provider.request({
+        //   method: "eth_chainId",
+        // });
+      } else {
+        console.error("Please install MetaMask!", error);
+      }
     },
     createAccount() {
       const wallet = {

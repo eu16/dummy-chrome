@@ -9,6 +9,9 @@
           style="max-width: 130px; padding: 20px"
         />
       </div>
+      <!-- <h3 style="text-align:center; font-size:1.5rem" v-if="scene === 1 || scene === 2">
+        {{ $t("login.login_with_central") }}
+      </h3> -->
       <div v-if="scene === 1">
         <label class="input-label">
           {{ $t("common.email") }}
@@ -45,7 +48,7 @@
             :class="!wallets.accounts.length ? 'flex' : ''"
             :disabled="!email || !password"
           >
-            Import
+            {{ $t("common.centralized_login")}}
           </button>
         </div>
       </div>
