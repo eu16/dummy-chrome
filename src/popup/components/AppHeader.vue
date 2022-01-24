@@ -213,7 +213,7 @@ import Config from "~/config";
 import MainTab from "./MainTab";
 import CreateTab from "./CreateTab";
 import helper from "mixins/helper";
-import { clearAll } from "../../services/utils/auth";
+import { clearAll, setLocale, getLocale } from "../../services/utils/auth";
 
 export default {
   mixins: [helper],
@@ -248,11 +248,18 @@ export default {
       currentNetwork: (state) => state.network,
     }),
   },
-
+  created: function () {
+    if (!getLocale()) {
+      if (this.$i18n.locale) {
+        setLocale(this.$i18n.locale);
+      } else {
+        setLocale("en");
+      }
+    }
+  },
   mounted() {
     this.networks = Config.networks;
   },
-
   methods: {
     goHome() {
       this.$router.push({ path: "/" });

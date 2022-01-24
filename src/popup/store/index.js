@@ -10,9 +10,11 @@ import transactions from "./modules/transactions";
 import global from "./modules/global";
 import settings from "./modules/settings";
 import assets from "./modules/assets";
+import VueCookies from 'vue-cookies'
 import * as getters from "./getters";
 
 Vue.use(Vuex);
+Vue.use(VueCookies);
 
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,

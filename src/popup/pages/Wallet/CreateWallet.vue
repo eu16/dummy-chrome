@@ -211,7 +211,7 @@ export default {
     ...mapState(["wallets"]),
   },
   mounted() {
-    // this.testWeb3();
+
   },
   watch: {
     smscode() {
@@ -230,9 +230,6 @@ export default {
   //   }
   // },
   methods: {
-    // testWeb3: async function () {
-    //   const web3 = new Web3(window.ethereum)
-    // },
     addAccount() {
       this.$store.commit("wallets/addAccount", {
         ...this.wallet,

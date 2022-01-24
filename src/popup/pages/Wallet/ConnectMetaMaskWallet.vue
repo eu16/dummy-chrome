@@ -36,11 +36,11 @@
             :class="!wallets.accounts.length ? 'flex' : ''"
             @click="connect"
           >
-            Connect
+            {{ $t("common.login") }}
           </button>
         </div>
       </div>
-      <div v-else-if="scene === 2">
+      <!-- <div v-else-if="scene === 2">
         <h3>Create the Account</h3>
         <div>Address</div>
         <span class="address-label">{{ address }}</span>
@@ -72,14 +72,14 @@
         width="250"
         :max="2"
         class="notifiaction-container"
-      />
+      /> -->
     </main>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import detectEthereumProvider from "@metamask/detect-provider";
+// import detectEthereumProvider from "@metamask/detect-provider";
 // import { connectLedgerApp } from "services/LedgerService";
 // import { importWallet, getAccount } from "../../../services/utils/web3.js";
 
@@ -96,27 +96,27 @@ export default {
   computed: {
     ...mapState(["wallets"]),
   },
-  mounted() {
-    this.connectMetamask();
-  },
+  // mounted() {
+  //   this.connectMetamask();
+  // },
   methods: {
     nextToPincode() {
       this.scene = 3;
     },
-    connectMetamask: async function () {
-      const provider = await detectEthereumProvider();
+    // connectMetamask: async function () {
+    //   const provider = await detectEthereumProvider();
 
-      if (provider) {
-        console.log("Ethereum successfully detected!");
+    //   if (provider) {
+    //     console.log("Ethereum successfully detected!");
 
-        console.log(provider)
-        // const chainId = await provider.request({
-        //   method: "eth_chainId",
-        // });
-      } else {
-        console.error("Please install MetaMask!", error);
-      }
-    },
+    //     console.log(provider)
+    //     // const chainId = await provider.request({
+    //     //   method: "eth_chainId",
+    //     // });
+    //   } else {
+    //     console.error("Please install MetaMask!", error);
+    //   }
+    // },
     createAccount() {
       const wallet = {
         isLedger: true,
