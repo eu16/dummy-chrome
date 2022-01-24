@@ -314,7 +314,7 @@ export function clearLocalStorage() {
 export function clearAll() {
 
     // removeEurusObject();
-    clearLocalStorage();
+    clearSessionStorage();
     clearToken();
     setAccounttype("centralized");
     // checkScheme()
