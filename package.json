@@ -20,6 +20,7 @@
     "@ledgerhq/hw-transport-webhid": "^5.7.0",
     "@ledgerhq/hw-transport-webusb": "4.74.1",
     "@metamask/browser-passworder": "^3.0.0",
+    "@metamask/controllers": "^25.1.0",
     "@metamask/detect-provider": "^1.2.0",
     "@metamask/obs-store": "^7.0.0",
     "@vue/babel-preset-app": "^4.4.1",

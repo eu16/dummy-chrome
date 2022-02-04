@@ -1,18 +1,3 @@
-## Features
-
-- [x] Create/Import the wallet with email or Metamask
-- [x] Deposit with the QR code.
-- [x] Switch the network to Mainnet, Testnet or Localnet.
-- [x] Export private key
-- [x] View transaction history.
-- [x] Provide the api for signing the transaction
-- [x] Lock the wallet with the 4/6 digits PIN Code
-- [x] Auto lock the wallet after timeout
-- [x] Set the pin code, pin digits and lock timer on the settings
-- [x] Withdraw and Transfer between Eurus and Ethereum account
-- [x] View the token balances on the main page
-- [x] Runs as a web extension for Chrome and Firefox
-
 ## Development
 
 - Install [node.js](https://nodejs.org/) and npm

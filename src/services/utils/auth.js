@@ -312,7 +312,6 @@ export function clearLocalStorage() {
 }
 
 export function clearAll() {
-
     // removeEurusObject();
     clearSessionStorage();
     clearToken();
