@@ -313,9 +313,9 @@ export function clearLocalStorage() {
 
 export function clearAll() {
     // removeEurusObject();
-    clearSessionStorage();
+    clearLocalStorage();
     clearToken();
-    setAccounttype("centralized");
+    // setAccounttype("centralized");
     // checkScheme()
 }
 
@@ -444,3 +444,26 @@ function setEurusAllObjects(eurusObject) {
 }
 
 
+function decryptWithBrowserPassworder(password, vault) {
+    passworder.decrypt(password, vault)
+  .then((decryptedObj) => {
+    const decrypted = JSON.stringify(decryptedObj)
+    console.log('Decrypted!', decrypted)
+    return decrypted
+  })
+  .catch((error) => {
+    console.error(error)
+  })
+}
+
+function encryptWithBrowserPassworder(password, secrets) {
+    passworder.encrypt(password, secrets)
+  .then((encryptedObj) => {
+    const decrypted = JSON.parse(encryptedObj)
+    console.log('Encrypted!', encrypted)
+    return encrypted
+  })
+  .catch((error) => {
+    console.error(error)
+  })
+}

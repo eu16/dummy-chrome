@@ -19,6 +19,9 @@
         <a v-if="wallets.address != ''" @click="goHome()">
           <i class="material-icons">home</i>
         </a>
+        <a v-if="wallets.address != ''" @click="goToDashboard()">
+          <i class="material-icons">account_balance_wallet</i>
+        </a>
       </div>
 
       <div class="network" v-click-outside="hideNetworkDropdown">
@@ -263,6 +266,9 @@ export default {
   methods: {
     goHome() {
       this.$router.push({ path: "/" });
+    },
+    goToDashboard() {
+      this.$router.push({ path: "/create-wallet" });
     },
     compressName(str) {
       if (str.length > 15)

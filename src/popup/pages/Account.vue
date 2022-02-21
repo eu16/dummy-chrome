@@ -23,7 +23,7 @@
             @click="onClickAccount()"
             v-tooltip.top="'Click to copy'"
           >
-            <h2 class="name-label">{{ wallets.email }}</h2>
+            <h4 class="name-label">{{ wallets.email }}</h4>
             <div class="box-address">
               {{ wallets.address }}
             </div>

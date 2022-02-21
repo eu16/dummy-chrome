@@ -11,10 +11,15 @@ import global from "./modules/global";
 import settings from "./modules/settings";
 import assets from "./modules/assets";
 import VueCookies from 'vue-cookies'
+import BootstrapVue from 'bootstrap-vue'
 import * as getters from "./getters";
+
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.use(Vuex);
 Vue.use(VueCookies);
+Vue.use(BootstrapVue);
 
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,

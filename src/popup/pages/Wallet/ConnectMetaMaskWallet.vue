@@ -15,18 +15,48 @@
         />
       </div>
       <div v-if="scene === 1">
-        <h3 style="text-align: center; font-size: 1.5rem">
-          {{ $t("login.login_with_metamask") }}
+        <h3 style="text-align: center; font-size: 0.75rem">
+          {{ $t("login.import_wallet") }}
         </h3>
-        <span class="form-label"
-          >If you already have an account with Metamask you can connect your
-          wallet directly via Metamask</span
-        >
+        <br />
+        <!-- <span class="form-label"
+          >If you already have a Decentralized account, you can import your wallet via a Seed Phrase or Private Ket</span
+        > -->
         <!-- <div class="wallet-group">
           <button class="but-ledger" @click="connect">
             <img src="images/ledger.svg" alt="Ledger" />
           </button>
         </div> -->
+
+        <b-tabs
+          pills
+          content-class="mt-3"
+          v-model="currentTabValue"
+          align="center"
+          style="font-size: 0.75rem"
+        >
+          <b-tab title="Seed Phrase" active>
+            <b-form-textarea
+              id="textarea"
+              v-model="text"
+              placeholder="Enter your seed phrase in correct order and separate each word with spaces"
+              rows="3"
+              max-rows="6"
+              style="text-align: center; font-size: 0.75rem"
+            ></b-form-textarea>
+          </b-tab>
+          <b-tab title="Private Key"
+            ><b-form-textarea
+              id="textarea"
+              v-model="value"
+              placeholder="Enter your private Key"
+              rows="3"
+              max-rows="6"
+              style="text-align: center; font-size: 0.75rem"
+            ></b-form-textarea
+          ></b-tab>
+        </b-tabs>
+        <br />
         <div class="button-group">
           <button class="outline" @click="$router.push('/home')">
             {{ $t("common.cancel") }}
@@ -38,6 +68,30 @@
           >
             {{ $t("common.login") }}
           </button>
+        </div>
+        <div v-if="scene === 2">
+          <label class="input-label">
+            {{ $t("common.loginpassword") }}
+            <input
+              class="input-field"
+              type="password"
+              name="password"
+              ref="password"
+              v-model="password"
+              :placeholder="$t('login.enter_password')"
+            />
+          </label>
+          <label class="input-label">
+            {{ $t("common.confirmloginpassword") }}
+            <input
+              class="input-field"
+              type="password"
+              name="password_confirm"
+              ref="password_confirm"
+              v-model="paymPassword_confirm"
+              :placeholder="$t('login.enter_password')"
+            />
+          </label>
         </div>
       </div>
       <!-- <div v-else-if="scene === 2">
@@ -79,44 +133,52 @@
 
 <script>
 import { mapState } from "vuex";
+// import extension from 'extensionizer';
 // import detectEthereumProvider from "@metamask/detect-provider";
 // import { connectLedgerApp } from "services/LedgerService";
 // import { importWallet, getAccount } from "../../../services/utils/web3.js";
 
 export default {
-  data: () => ({
-    scene: 1,
-    name: "",
-    address: "",
-    error: {
-      show: false,
-      message: "",
-    },
-  }),
+  data() {
+    return {
+      scene: 1,
+      name: "",
+      address: "",
+      error: {
+        show: false,
+        message: "",
+      },
+      value: "",
+      text: "",
+    };
+  },
   computed: {
     ...mapState(["wallets"]),
   },
-  // mounted() {
-  //   this.connectMetamask();
-  // },
+  mounted() {
+    this.connectMetamask();
+  },
   methods: {
     nextToPincode() {
       this.scene = 3;
     },
-    // connectMetamask: async function () {
-    //   const provider = await detectEthereumProvider();
+    connectMetamask: async function () {
+      // console.log("extension 1  - working", extension.storage.local)
+      // console.log("extension 2 - working", chrome.storage.local)
+      // console.log("extension get", extension.storage.local.get())
+      const provider = await detectEthereumProvider();
 
-    //   if (provider) {
-    //     console.log("Ethereum successfully detected!");
+      if (provider) {
+        console.log("Ethereum successfully detected!");
 
-    //     console.log(provider)
-    //     // const chainId = await provider.request({
-    //     //   method: "eth_chainId",
-    //     // });
-    //   } else {
-    //     console.error("Please install MetaMask!", error);
-    //   }
-    // },
+        console.log(provider);
+        // const chainId = await provider.request({
+        //   method: "eth_chainId",
+        // });
+      } else {
+        console.error("Please install MetaMask!", error);
+      }
+    },
     createAccount() {
       const wallet = {
         isLedger: true,
@@ -134,55 +196,19 @@ export default {
       });
     },
     connect: async function () {
-      try {
-        await window.ethereum.request({ method: "eth_requestAccounts" });
-      } catch (error) {
-        console.error(error);
+      if (this.text != "") {
+        console.log("Entered Seed Phrase - check Seed Phrase here");
+        this.scene = 2;
+      } else if (this.value != "") {
+        console.log("Entered Private Key - check Private Key here");
+        this.scene = 3;
       }
+      // try {
+      //   await window.ethereum.request({ method: "eth_requestAccounts" });
+      // } catch (error) {
+      //   console.error(error);
+      // }
     },
-    // connect: async function () {
-    //   let accounts = await getAccount();
-    //   let accountAddress = accounts[0];
-    //   setAddress(accountAddress);
-    //   try {
-    //     let importWalletResponse = await importWallet(accountAddress);
-    //     if (
-    //       importWalletResponse &&
-    //       importWalletResponse.data &&
-    //       importWalletResponse.data.data &&
-    //       importWalletResponse.data.data.token
-    //     ) {
-    //       setToken(importWalletResponse.data.data.token);
-    //       setAccounttype("decentralized");
-    //       this.$store.dispatch("setAppIsLoading", false);
-    //       this.$router.push("/home");
-    //     } else if (
-    //       importWalletResponse &&
-    //       importWalletResponse.status === 404
-    //     ) {
-    //       // this.$message(
-    //       //   this.$i18n.t("common.server_maintenance"),
-    //       //   "warning"
-    //       // );
-    //       console.log(this.$i18n.t("common.server_maintenance"));
-    //     } else {
-    //       // this.$message(
-    //       //   this.$i18n.t("common.network_error"),
-    //       //   "warning"
-    //       // );
-    //       console.log(this.$i18n.t("common.network_error"));
-    //     }
-    //   } catch (error) {
-    //     console.error("importWallet error:", error);
-    //     if (error && error.response && error.response.status === 404) {
-    //       // this.$message(
-    //       //   this.$i18n.t("common.server_maintenance"),
-    //       //   "warning"
-    //       // );
-    //       console.log(this.$i18n.t("common.server_maintenance"));
-    //     }
-    //   }
-    // },
   },
 };
 </script>

@@ -7,7 +7,7 @@
         active: myroute.name == 'connect-metamask-wallet',
       }"
       to="/connect-metamask-wallet"
-    >{{ $t("login.login_with_metamask") }}</router-link>
+    >{{ $t("login.import_wallet") }}</router-link>
   </nav>
 </template>
 

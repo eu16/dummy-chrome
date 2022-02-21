@@ -40,6 +40,10 @@ import "./css/modal.scss";
 import "./css/vue-select.scss";
 import Popper from "vue-popperjs";
 import "vue-popperjs/dist/vue-popper.css";
+import BootstrapVue from 'bootstrap-vue'
+
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.config.productionTip = false;
 
@@ -61,6 +65,7 @@ Vue.use(Notifications);
 Vue.use(vClickOutside);
 Vue.use(VueClipboard);
 Vue.use(VueCookies);
+Vue.use(BootstrapVue);
 Vue.use(Tooltip, {
   delay: 1,
 });
